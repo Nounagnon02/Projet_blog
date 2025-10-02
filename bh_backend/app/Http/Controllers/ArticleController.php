@@ -37,6 +37,8 @@ class ArticleController extends Controller
                 'all_data' => $request->all(),
                 'files' => $request->allFiles()
             ]);
+            //Recuperer l'id de la categorie
+            $category = Category::where('name', $request->category)->first();
             // Validation complète incluant l'image
             $validated = $request->validate([
                 'title' => 'required|string|min:2|unique:articles,title',
