@@ -59,10 +59,10 @@ body {
 /* ===== HERO SECTION MAGNIFIQUE ===== */
 .hero {
   text-align: center;
-  padding: 8rem 2rem 4rem;
+  padding: 20rem 4rem 6rem;
   position: relative;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.1);
+  background-image: url('./pages/images/une-scene-de-conte-de-fees-sortant-d-un-livre.jpg');
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   margin-bottom: 3rem;

@@ -2,21 +2,34 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { articleAPI } from '../services/api';
 import './ArticleList.css';
+import api from '../services/Api';
 
 const ArticleList = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     loadArticles();
+    loadCategories();
   }, []);
+  
+  const loadCategories = async () => {
+        try {
+          const response = await api.get('/categories');
+          setCategories(response.data);
+        } catch (error) {
+          console.error('Erreur:', error);
+        }
+      };
+    
 
   const loadArticles = async () => {
     try {
-      const data = await articleAPI.getArticles();
-      setArticles(data);
+      const response = await api.get('/articles');
+      setArticles(response.data);
     } catch (error) {
       console.error('Erreur:', error);
       // Données mockées pour tester le design
@@ -51,16 +64,17 @@ const ArticleList = () => {
     }
   };
 
+
   // Filtrer les articles
   const filteredArticles = articles.filter(article => {
     const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          article.short_description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = !selectedCategory || article.category === selectedCategory;
+    const matchesCategory = !selectedCategory || article.category_id == selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
   // Catégories uniques
-  const categories = [...new Set(articles.map(article => article.category))];
+  
 
   if (loading) {
     return (
@@ -100,7 +114,7 @@ const ArticleList = () => {
             >
               <option value="">Toutes les catégories</option>
               {categories.map(category => (
-                <option key={category} value={category}>{category}</option>
+                <option key={category} value={category.id}>{category.name}</option>
               ))}
             </select>
           </div>
@@ -136,7 +150,7 @@ const ArticleList = () => {
                 <div className="article-image-container">
                   {article.image ? (
                     <img 
-                      src={`http://localhost:8000/storage/${article.image}`}
+                      src={`http://localhost:8000/storage/${article.image1}`}
                       alt={article.title}
                       className="article-image"
                       onError={(e) => {

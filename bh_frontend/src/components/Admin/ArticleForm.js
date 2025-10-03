@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import { articleAPI } from '../../services/api';
+import  api  from '../../services/Api';
 import './ArticleForm.css';
 
 const ArticleForm = () => {
@@ -7,13 +8,23 @@ const ArticleForm = () => {
     title: '',
     content: '',
     short_description: '',
-    category: '',
+    image1: '',
+    image2: '',
+    category_id: '',
+    author_id: 1, // L'admin a l'ID 1
+    date_published: new Date().toISOString(),
   });
-  const [image, setImage] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [imagePreview, setImagePreview] = useState(null);
 
-  const handleSubmit = async (e) => {
+
+  
+  const [image1, setImage1] = useState(null);
+  const [image2, setImage2] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [imagePreview1, setImagePreview1] = useState(null);
+  const [imagePreview2, setImagePreview2] = useState(null);
+  const [categories,setCategories] =useState([]);
+
+const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     
@@ -22,43 +33,82 @@ const ArticleForm = () => {
     submitData.append('content', formData.content);
     submitData.append('short_description', formData.short_description);
     submitData.append('category_id', formData.category_id);
-    submitData.append('author_id', 1); // L'admin a l'ID 1
-    submitData.append('date_published', new Date().toISOString());
+    submitData.append('author_id', 1);
     
-    if (image) {
-      submitData.append('image', image);
+    // CORRECTION : Formater la date pour MySQL
+    const now = new Date();
+    const mysqlDate = now.toISOString().slice(0, 19).replace('T', ' ');
+    submitData.append('date_published', mysqlDate);
+    // Résultat : "2025-10-02 16:41:18"
+    
+    if (image1) {
+      submitData.append('image1', image1);
+    }
+    if (image2) {
+      submitData.append('image2', image2);
+    }
+
+    // Debug: log FormData properly
+    console.log('FormData contents:');
+    for (let [key, value] of submitData.entries()) {
+      console.log(key + ': ', value);
     }
 
     try {
-      const result = await articleAPI.createArticle(submitData);
+      const result = await api.post('/articles/storage', submitData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       
-      if (result.success) {
+      console.log('Response:', result.data);
+      
+      if (result.data.success) {
         alert('🎉 Histoire créée avec succès!');
         
-        // 🔥 REcharger la page automatiquement après 1 seconde
         setTimeout(() => {
-          window.location.reload(); // Cette ligne rafraîchit toute la page
+          window.location.reload();
         }, 1000);
         
-        // Réinitialiser le formulaire
         setFormData({ 
-          title: '', 
-          content: '', 
-          short_description: '', 
-          category_id: '' 
+            title: '',
+            content: '',
+            short_description: '',
+            category_id: '',
         });
-        setImage(null);
-        setImagePreview(null);
+        setImage1(null);
+        setImage2(null);
+        setImagePreview1(null);
+        setImagePreview2(null);
         
       } else {
-        alert('❌ Erreur: ' + result.message);
+        alert('❌ Erreur: ' + (result.data.message || 'Unknown error'));
       }
     } catch (error) {
-      alert('❌ Erreur lors de la création: ' + error.message);
+      console.error('Full error:', error);
+      if (error.response?.data?.errors) {
+        const errorMessages = Object.values(error.response.data.errors).flat().join(', ');
+        alert('❌ Erreurs de validation: ' + errorMessages);
+      } else {
+        alert('❌ Erreur lors de la création: ' + (error.response?.data?.message || error.message));
+      }
     } finally {
       setIsSubmitting(false);
     }
-  };
+};
+    // Charger les catégories
+  const loadCategories = async () => {
+      try {
+        const response = await api.get('/categories');
+        setCategories(response.data);
+      } catch (error) {
+        console.error('Erreur:', error);
+      }
+    };
+  
+    useEffect(() => {
+      loadCategories();
+    }, []);
 
 
   const handleChange = (e) => {
@@ -68,19 +118,33 @@ const ArticleForm = () => {
     });
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange1 = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(file);
+      setImage1(file);
       const reader = new FileReader();
-      reader.onloadend = () => setImagePreview(reader.result);
+      reader.onloadend = () => setImagePreview1(reader.result);
       reader.readAsDataURL(file);
     }
   };
 
-  const removeImage = () => {
-    setImage(null);
-    setImagePreview(null);
+  const handleImageChange2 = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage2(file);
+      const reader = new FileReader();
+      reader.onloadend = () => setImagePreview2(reader.result);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeImage1 = () => {
+    setImage1(null);
+    setImagePreview1(null);
+  };
+  const removeImage2 = () => {
+    setImage2(null);
+    setImagePreview2(null);
   };
 
   return (
@@ -137,18 +201,27 @@ const ArticleForm = () => {
               className="form-input"
               required
               >           
-              <option value="">Sélectionnez une catégorie</option>
-              <option value="1">Aventure</option>
-              <option value="2">Romance</option>
-              <option value="3">Mystère</option>
+              
+              <option value="">
+                  { categories.length === 0 
+                      ? "Aucune categorie disponible "
+                      : "Sélectionnez une catégorie"
+                  }
+              </option>
+              {categories.map(cat => (
+                  <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                  </option>
+              ))}
+
             </select>
 
           <div className="form-group">
-            <label className="form-label">Image</label>
-            {imagePreview ? (
+            <label className="form-label">Image1</label>
+            {imagePreview1 ? (
               <div className="image-preview">
-                <img src={imagePreview} alt="Preview" className="preview-image" />
-                <button type="button" onClick={removeImage} className="remove-image-btn">
+                <img src={imagePreview1} alt="Preview" className="preview-image" />
+                <button type="button" onClick={removeImage1} className="remove-image-btn">
                   ✕
                 </button>
               </div>
@@ -157,13 +230,39 @@ const ArticleForm = () => {
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={handleImageChange}
+                  onChange={handleImageChange1}
                   className="file-input"
                   required
                 />
                 <div className="upload-content">
                   <div className="upload-icon">📷</div>
                   <p>Ajouter une image</p>
+                </div>
+              </label>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Image2</label>
+            {imagePreview2 ? (
+              <div className="image-preview">
+                <img src={imagePreview2} alt="Preview" className="preview-image" />
+                <button type="button" onClick={removeImage2} className="remove-image-btn">
+                  ✕
+                </button>
+              </div>
+            ) : (
+              <label className="file-upload-area">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange2}
+                  className="file-input"
+                  required
+                />
+                <div className="upload-content">
+                  <div className="upload-icon">📷</div>
+                  <p>Ajouter la deuxième image</p>
                 </div>
               </label>
             )}

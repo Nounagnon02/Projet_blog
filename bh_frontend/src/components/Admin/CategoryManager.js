@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './CategoryManager.css';
+import api from '../../services/Api';
+import axios from 'axios';
 
 const CategoryManager = () => {
   const [categories, setCategories] = useState([]);
@@ -8,16 +10,14 @@ const CategoryManager = () => {
   const [editName, setEditName] = useState('');
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false); // Simple form inline
+  const [loading, setLoading] = useState(false);
+  const [categorie, setCategorie] = useState([]);
 
   // Charger les catégories
   const loadCategories = async () => {
     try {
-      const mockCategories = [
-        { id: 1, name: 'Aventure' },
-        { id: 2, name: 'Romance' },
-        { id: 3, name: 'Mystère' }
-      ];
-      setCategories(mockCategories);
+      const response = await api.get('/categories');
+      setCategories(response.data);
     } catch (error) {
       console.error('Erreur:', error);
     }
@@ -27,35 +27,121 @@ const CategoryManager = () => {
     loadCategories();
   }, []);
 
-  const handleAddCategory = async () => {
-    if (newCategory.trim()) {
-      const newCat = {
-        id: Date.now(),
-        name: newCategory.trim()
-      };
-      setCategories([...categories, newCat]);
-      setNewCategory('');
-      setShowAddForm(false);
-      alert('✅ Catégorie ajoutée avec succès!');
-    }
-  };
 
-  const handleUpdateCategory = async (id) => {
-    if (editName.trim()) {
-      setCategories(categories.map(cat => 
-        cat.id === id ? { ...cat, name: editName.trim() } : cat
-      ));
+
+  const handleAddCategory = async (e) => {
+    e.preventDefault();
+    
+    if (!newCategory.trim()) {
+        alert('Veuillez entrer un nom');
+        return;
+    }
+
+    try {
+        setLoading(true);
+        
+        // Envoyer seulement la nouvelle catégorie
+        const response = await api.post(
+            'categories/store',
+            { name: newCategory.trim() },
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+        
+        if (response.data.success) {
+            // Ajouter la nouvelle catégorie à la liste existante
+            setCategories([...categories, response.data.category]);
+            
+            // Réinitialiser le formulaire
+            setNewCategory('');
+            setShowAddForm(false);
+            
+            alert('Catégorie ajoutée avec succès');
+        } else {
+            throw new Error(response.data.message || 'Erreur lors de l\'enregistrement bor ingbé');
+        }
+        
+    } catch (error) {
+        const errorMsg = error.response?.data?.message || 
+                        error.message || 
+                        'Erreur lors de l\'enregistrement';
+        
+        alert(`Erreur: ${errorMsg}`);
+        console.error('Error details:', error);
+    } finally {
+        setLoading(false);
+    }
+};
+
+const handleUpdateCategory = async (id) => {
+  if (!editName.trim()) {
+    alert('Le nom ne peut pas être vide');
+    return;
+  }
+
+  try {
+    setLoading(true);
+    const response = await api.put(
+      `/categories/update/${id}`, // Add leading slash
+      { name: editName.trim() }  // Simplified payload
+    );
+
+    // Check if we have a response
+    if (response && response.data) {
+      // Update the local state
+      setCategories(prevCategories => 
+        prevCategories.map(cat =>
+          cat.id === id ? { ...cat, name: editName.trim() } : cat
+        )
+      );
+      
+      // Reset the form
       setEditingId(null);
       setEditName('');
+      
+      // Show success message
       alert('✅ Catégorie modifiée avec succès!');
+    } else {
+      throw new Error('Réponse invalide du serveur');
     }
-  };
+  } catch (error) {
+    // Better error handling
+    console.error('Update error:', error);
+    const errorMsg = error.response?.data?.message 
+      || error.message 
+      || 'Erreur lors de la modification';
+    
+    alert(`Erreur de modification: ${errorMsg}`);
+  } finally {
+    setLoading(false);
+  }
+};
 
-  const handleDeleteCategory = async (id) => {
-    setCategories(categories.filter(cat => cat.id !== id));
-    setDeleteConfirm(null);
-    alert('🗑️ Catégorie supprimée avec succès!');
-  };
+const handleDeleteCategory = async (id) => {
+  try {
+    setLoading(true);
+    const response = await api.delete(`categories/destroy/${id}`);
+
+    if (response.data.success) {
+      setCategories(categories.filter(cat => cat.id !== id));
+      setDeleteConfirm(null);
+      alert('🗑️ Catégorie supprimée avec succès!');
+    } else {
+      throw new Error(response.data.message || 'Erreur lors de la suppression ok donc huytrre');
+    }
+  } catch (error) {
+    const errorMsg = error.response?.data?.message ||
+      error.message ||
+      'Erreur lors de la suppression';
+    alert(`Erreur: ${errorMsg}`);
+    console.error('Error details:', error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const startDelete = (id, name) => {
     setDeleteConfirm({ id, name });

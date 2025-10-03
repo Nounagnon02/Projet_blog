@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('title');
             $table->longText('content');
             $table->string('short_description');
-            $table->string('image');
+            $table->string('image1');
+            $table->string('image2');
             $table->foreignId('author_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->timestamp('date_published')->useCurrent();

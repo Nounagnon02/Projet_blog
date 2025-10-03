@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,4 +26,11 @@ Route::group(['prefix' => 'articles'], function () {
     Route::post('/storage', [ArticleController::class,   'storeHistory']);
     Route::put('/update/{id}', [ArticleController::class, 'updateHistory']);
     Route::delete('/destroy/{id}', [ArticleController::class, 'destroyHistory']);
+});
+
+Route::group(['prefix' => 'categories'], function(){
+    Route::get('/', [CategoryController::class, 'index']);
+    Route::post('/store', [CategoryController::class, 'store']);
+    Route::delete('/destroy/{id}', [CategoryController::class, 'destroy']);
+    Route::put('/update/{id}', [CategoryController::class, 'update']);
 });
