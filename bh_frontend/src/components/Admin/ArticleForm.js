@@ -1,5 +1,5 @@
 import React, { useState , useEffect} from 'react';
-import { articleAPI } from '../../services/api';
+import { articleAPI } from '../../services/Api';
 import  api  from '../../services/Api';
 import './ArticleForm.css';
 

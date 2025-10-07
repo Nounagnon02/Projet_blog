@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { articleAPI } from '../services/api';
+import { articleAPI } from '../services/Api';
 import './ArticleList.css';
 import api from '../services/Api';
 
@@ -91,9 +91,7 @@ const ArticleList = () => {
         
         {/* En-tête avec recherche et filtres */}
         <div className="articles-header">
-          <h2>📚 Découvrez Nos Histoires</h2>
-          <p>Plongez dans des récits captivants et laissez-vous emporter</p>
-          
+
           <div className="filters-container">
             {/* Barre de recherche */}
             <div className="search-box">

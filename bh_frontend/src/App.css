@@ -376,3 +376,47 @@ body {
   margin: 2rem auto;
   max-width: 500px;
 }
+
+/* Assure que le header descende quand il y a une annonce */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+/* Ajuste la hero section si nécessaire */
+.hero {
+  margin-top: 0;
+}
+
+
+@media (max-width: 768px) {
+  .hero {
+    padding-top: 1rem;
+  }
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  margin-top: 0; /* Reset */
+}
+
+/* Si les annonces sont visibles, ajoute un margin au header */
+.app:has(.announcements-banner:not(:empty)) .header {
+  margin-top: 80px; /* Ajuste cette valeur selon la hauteur de tes annonces */
+}
+
+/* Ajuste la hero section aussi */
+.app:has(.announcements-banner:not(:empty)) .hero {
+  margin-top: 0;
+}
+
+/* Pour les écrans mobiles */
+@media (max-width: 768px) {
+  .app:has(.announcements-banner:not(:empty)) .header {
+    margin-top: 100px; /* Plus d'espace sur mobile */
+  }
+}
+
