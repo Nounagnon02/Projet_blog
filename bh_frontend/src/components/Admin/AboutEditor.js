@@ -1,50 +1,94 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { aboutPageAPI } from './apiService';
 import './AboutEditor.css';
 
 const AboutEditor = ({ onClose }) => {
   const [aboutData, setAboutData] = useState({
-    heroTitle: "👋 Bienvenue sur StoryHub",
-    heroSubtitle: "Votre plateforme de partage d'histoires captivantes",
-    missionTitle: "🎯 Notre Mission", 
-    missionSubtitle: "Donner vie aux récits qui méritent d'être partagés",
-    missionInspire: "Créer un espace où chaque voix peut s'exprimer et inspirer des milliers de lecteurs",
-    missionConnect: "Rassembler une communauté passionnée d'auteurs et de lecteurs du monde entier",
-    missionInnovate: "Révolutionner la façon dont les histoires sont découvertes et partagées",
-    teamTitle: "👥 Notre Équipe",
-    teamSubtitle: "Des passionnés dévoués à votre expérience de lecture",
-    ctaTitle: "📖 Prêt à commencer votre aventure ?",
-    ctaSubtitle: "Rejoignez notre communauté et découvrez des histoires extraordinaires"
+    heroTitle: "",
+    heroSubtitle: "",
+    missionTitle: "",
+    missionSubtitle: "",
+    missionInspire: "",
+    missionConnect: "",
+    missionInnovate: "",
+    teamTitle: "",
+    teamSubtitle: "",
+    ctaTitle: "",
+    ctaSubtitle: ""
   });
 
   const [activeSection, setActiveSection] = useState('hero');
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSave = async () => {
+  // Charger les données au montage du composant
+  useEffect(() => {
+    loadAboutData();
+  }, []);
+
+  const loadAboutData = async () => {
     try {
-      // TODO: Appel API pour sauvegarder
-      console.log('Sauvegarde des données:', aboutData);
-      alert('✅ Modifications sauvegardées avec succès !');
-      if (onClose) onClose();
-    } catch (error) {
-      console.error('Erreur lors de la sauvegarde:', error);
-      alert('❌ Erreur lors de la sauvegarde');
+      setLoading(true);
+      setError(null);
+      const response = await aboutPageAPI.get();
+      
+      if (response.success && response.data) {
+        // Mapper les données de la DB vers le format du composant
+        setAboutData({
+          heroTitle: response.data.hero_title || "",
+          heroSubtitle: response.data.hero_subtitle || "",
+          missionTitle: response.data.mission_title || "",
+          missionSubtitle: response.data.mission_subtitle || "",
+          missionInspire: response.data.mission_inspire || "",
+          missionConnect: response.data.mission_connect || "",
+          missionInnovate: response.data.mission_innovate || "",
+          teamTitle: response.data.team_title || "",
+          teamSubtitle: response.data.team_subtitle || "",
+          ctaTitle: response.data.cta_title || "",
+          ctaSubtitle: response.data.cta_subtitle || ""
+        });
+      }
+    } catch (err) {
+      console.error('Erreur lors du chargement:', err);
+      setError('Impossible de charger les données. Veuillez réessayer.');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleReset = () => {
-    if (window.confirm('Voulez-vous vraiment réinitialiser toutes les modifications ?')) {
-      setAboutData({
-        heroTitle: "👋 Bienvenue sur StoryHub",
-        heroSubtitle: "Votre plateforme de partage d'histoires captivantes",
-        missionTitle: "🎯 Notre Mission",
-        missionSubtitle: "Donner vie aux récits qui méritent d'être partagés",
-        missionInspire: "Créer un espace où chaque voix peut s'exprimer et inspirer des milliers de lecteurs",
-        missionConnect: "Rassembler une communauté passionnée d'auteurs et de lecteurs du monde entier", 
-        missionInnovate: "Révolutionner la façon dont les histoires sont découvertes et partagées",
-        teamTitle: "👥 Notre Équipe",
-        teamSubtitle: "Des passionnés dévoués à votre expérience de lecture",
-        ctaTitle: "📖 Prêt à commencer votre aventure ?",
-        ctaSubtitle: "Rejoignez notre communauté et découvrez des histoires extraordinaires"
-      });
+  const handleSave = async () => {
+    try {
+      setSaving(true);
+      setError(null);
+      
+      const response = await aboutPageAPI.update(aboutData);
+      
+      if (response.success) {
+        alert('✅ Modifications sauvegardées avec succès !');
+        if (onClose) onClose();
+      } else {
+        throw new Error(response.message || 'Erreur lors de la sauvegarde');
+      }
+    } catch (err) {
+      console.error('Erreur lors de la sauvegarde:', err);
+      
+      if (err.response?.data?.errors) {
+        const errors = Object.values(err.response.data.errors).flat();
+        setError(errors.join('\n'));
+      } else {
+        setError('❌ Erreur lors de la sauvegarde. Veuillez réessayer.');
+      }
+      
+      alert(error || '❌ Erreur lors de la sauvegarde');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleReset = async () => {
+    if (window.confirm('Voulez-vous vraiment recharger les données depuis la base de données ?')) {
+      await loadAboutData();
     }
   };
 
@@ -228,6 +272,16 @@ const AboutEditor = ({ onClose }) => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="about-editor">
+        <div className="loading-container">
+          <p>⏳ Chargement des données...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="about-editor">
       <div className="editor-header">
@@ -236,6 +290,14 @@ const AboutEditor = ({ onClose }) => {
           <p>Modifiez le contenu de chaque section de votre page À Propos</p>
         </div>
       </div>
+
+      {error && (
+        <div className="error-banner">
+          <span>⚠️</span>
+          <p>{error}</p>
+          <button onClick={() => setError(null)}>✕</button>
+        </div>
+      )}
 
       <div className="editor-layout">
         {/* Navigation latérale */}
@@ -270,21 +332,25 @@ const AboutEditor = ({ onClose }) => {
 
           {/* Actions globales */}
           <div className="editor-actions">
-            <button className="save-btn" onClick={handleSave}>
+            <button 
+              className="save-btn" 
+              onClick={handleSave}
+              disabled={saving}
+            >
               <span className="btn-icon">💾</span>
-              Sauvegarder les modifications
+              {saving ? 'Sauvegarde...' : 'Sauvegarder les modifications'}
             </button>
-            <button className="preview-btn">
-              <span className="btn-icon">👁️</span>
-              Aperçu
-            </button>
-            <button className="reset-btn" onClick={handleReset}>
+            <button 
+              className="reset-btn" 
+              onClick={handleReset}
+              disabled={saving || loading}
+            >
               <span className="btn-icon">🔄</span>
-              Réinitialiser
+              Recharger
             </button>
             {onClose && (
               <button className="close-btn" onClick={onClose}>
-                <span className="btn-icon">❌</span>
+                <span className="btn-icon">✕</span>
                 Fermer
               </button>
             )}

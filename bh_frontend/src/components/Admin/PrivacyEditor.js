@@ -1,79 +1,118 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { privacyPageAPI } from './apiService';
 import './PrivacyEditor.css';
 
 const PrivacyEditor = ({ onClose }) => {
   const [privacyData, setPrivacyData] = useState({
-    // Hero Section
-    heroTitle: "🔒 Politique de Confidentialité",
-    heroSubtitle: "Bienvenue sur StoryHub",
-    heroDescription: "La confidentialité de nos visiteurs est très importante. Cette politique explique comment nous traitons vos informations.",
-    
-    // Section Collecte
-    collecteTitle: "Collecte d'Informations",
-    collecteDescription: "Pour les lecteurs : Aucune information personnelle n'est collectée. Vous pouvez lire nos histoires librement sans créer de compte.",
-    techInfo1: "Adresse IP (anonymisée)",
-    techInfo2: "Type de navigateur",
-    techInfo3: "Pages visitées",
-    techInfo4: "Durée de lecture",
-    auteursInfo1: "Nom et prénom",
-    auteursInfo2: "Adresse email",
-    auteursInfo3: "Historique des publications",
-    auteursInfo4: "Photos de profil (optionnelles)",
-    
-    // Section Cookies
-    cookiesTitle: "Cookies et Services Tiers",
-    cookiesWarning: "Important : Nous utilisons des services tiers pour améliorer votre expérience.",
-    analyticsTitle: "Google Analytics",
-    analyticsDesc: "Analyse anonyme du trafic pour comprendre les préférences de lecture",
-    adsenseTitle: "Google AdSense",
-    adsenseDesc: "Publicités pertinentes pour soutenir financièrement la plateforme",
-    cookieControlText: "Vous pouvez désactiver les cookies publicitaires en visitant :",
-    
-    // Section Protection
-    protectionTitle: "Protection des Données",
-    protectionFeature1: "Chiffrement SSL",
-    protectionDesc1: "Toutes les connexions sont sécurisées",
-    protectionFeature2: "Respect des œuvres",
-    protectionDesc2: "Les histoires publiées restent la propriété de leurs auteurs",
-    protectionFeature3: "Transparence totale",
-    protectionDesc3: "Nous ne vendons ni ne partageons vos données",
-    
-    // Section Liens
-    liensTitle: "Liens Externes",
-    liensDescription: "Notre bibliothèque peut contenir des liens vers des sites externes :",
-    lien1: "Plateformes de musique",
-    lien2: "Réseaux sociaux des auteurs",
-    lien3: "Autres ressources littéraires",
-    liensDisclaimer: "Note : Nous ne sommes pas responsables des pratiques de confidentialité de ces sites tiers.",
-    
-    // Section Consentement
-    consentTitle: "Consentement",
-    consentText: "En utilisant StoryHub, vous acceptez notre politique de confidentialité.",
-    consentNote: "Lecture libre et anonyme - Aucune inscription requise",
-    
-    // Section Contact
-    contactTitle: "Contact",
-    contactText: "Pour toute question concernant la confidentialité :",
-    contactEmail: "privacy@storyhub.com",
-    contactMethod: "Via notre page de contact",
-    
-    // Mise à jour
-    updateTitle: "Dernière mise à jour",
-    updateDate: "15 Janvier 2024",
-    updateNote: "Nous révisons régulièrement cette politique pour garantir votre protection."
+    heroTitle: "",
+    heroSubtitle: "",
+    heroDescription: "",
+    collecteTitle: "",
+    collecteDescription: "",
+    techInfo1: "",
+    techInfo2: "",
+    techInfo3: "",
+    techInfo4: "",
+    auteursInfo1: "",
+    auteursInfo2: "",
+    auteursInfo3: "",
+    auteursInfo4: "",
+    cookiesTitle: "",
+    cookiesWarning: "",
+    analyticsTitle: "",
+    analyticsDesc: "",
+    adsenseTitle: "",
+    adsenseDesc: "",
+    cookieControlText: "",
+    protectionTitle: "",
+    protectionFeature1: "",
+    protectionDesc1: "",
+    protectionFeature2: "",
+    protectionDesc2: "",
+    protectionFeature3: "",
+    protectionDesc3: ""
   });
 
   const [activeSection, setActiveSection] = useState('hero');
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    loadPrivacyData();
+  }, []);
+
+  const loadPrivacyData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await privacyPageAPI.get();
+      
+      if (response.success && response.data) {
+        setPrivacyData({
+          heroTitle: response.data.hero_title || "",
+          heroSubtitle: response.data.hero_subtitle || "",
+          heroDescription: response.data.hero_description || "",
+          collecteTitle: response.data.collecte_title || "",
+          collecteDescription: response.data.collecte_description || "",
+          techInfo1: response.data.tech_info_1 || "",
+          techInfo2: response.data.tech_info_2 || "",
+          techInfo3: response.data.tech_info_3 || "",
+          techInfo4: response.data.tech_info_4 || "",
+          auteursInfo1: response.data.auteurs_info_1 || "",
+          auteursInfo2: response.data.auteurs_info_2 || "",
+          auteursInfo3: response.data.auteurs_info_3 || "",
+          auteursInfo4: response.data.auteurs_info_4 || "",
+          cookiesTitle: response.data.cookies_title || "",
+          cookiesWarning: response.data.cookies_warning || "",
+          analyticsTitle: response.data.analytics_title || "",
+          analyticsDesc: response.data.analytics_desc || "",
+          adsenseTitle: response.data.adsense_title || "",
+          adsenseDesc: response.data.adsense_desc || "",
+          cookieControlText: response.data.cookie_control_text || "",
+          protectionTitle: response.data.protection_title || "",
+          protectionFeature1: response.data.protection_feature_1 || "",
+          protectionDesc1: response.data.protection_desc_1 || "",
+          protectionFeature2: response.data.protection_feature_2 || "",
+          protectionDesc2: response.data.protection_desc_2 || "",
+          protectionFeature3: response.data.protection_feature_3 || "",
+          protectionDesc3: response.data.protection_desc_3 || ""
+        });
+      }
+    } catch (err) {
+      console.error('Erreur lors du chargement:', err);
+      setError('Impossible de charger les données. Veuillez réessayer.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSave = async () => {
     try {
-      // TODO: Appel API pour sauvegarder
-      console.log('Sauvegarde des données privacy:', privacyData);
-      alert('✅ Politique de confidentialité sauvegardée !');
-      if (onClose) onClose();
-    } catch (error) {
-      console.error('Erreur lors de la sauvegarde:', error);
-      alert('❌ Erreur lors de la sauvegarde');
+      setSaving(true);
+      setError(null);
+      
+      const response = await privacyPageAPI.update(privacyData);
+      
+      if (response.success) {
+        alert('✅ Politique de confidentialité sauvegardée avec succès !');
+        if (onClose) onClose();
+      } else {
+        throw new Error(response.message || 'Erreur lors de la sauvegarde');
+      }
+    } catch (err) {
+      console.error('Erreur lors de la sauvegarde:', err);
+      
+      if (err.response?.data?.errors) {
+        const errors = Object.values(err.response.data.errors).flat();
+        setError(errors.join('\n'));
+      } else {
+        setError('❌ Erreur lors de la sauvegarde. Veuillez réessayer.');
+      }
+      
+      alert(error || '❌ Erreur lors de la sauvegarde');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -81,11 +120,7 @@ const PrivacyEditor = ({ onClose }) => {
     { id: 'hero', name: '🏠 Section Hero', icon: '🏠' },
     { id: 'collecte', name: '📊 Collecte', icon: '📊' },
     { id: 'cookies', name: '🍪 Cookies', icon: '🍪' },
-    { id: 'protection', name: '🛡️ Protection', icon: '🛡️' },
-    { id: 'liens', name: '🔗 Liens externes', icon: '🔗' },
-    { id: 'consent', name: '✅ Consentement', icon: '✅' },
-    { id: 'contact', name: '📩 Contact', icon: '📩' },
-    { id: 'update', name: '🔄 Mise à jour', icon: '🔄' }
+    { id: 'protection', name: '🛡️ Protection', icon: '🛡️' }
   ];
 
   const renderSectionContent = () => {
@@ -206,7 +241,7 @@ const PrivacyEditor = ({ onClose }) => {
 
               <div className="card-editor">
                 <div className="card-header">
-                  <span className="card-icon">✍️</span>
+                  <span className="card-icon">✏️</span>
                   <h5>Pour les auteurs uniquement</h5>
                 </div>
                 <div className="form-group">
@@ -331,7 +366,7 @@ const PrivacyEditor = ({ onClose }) => {
 
             <div className="form-group">
               <label className="form-label">
-                <span className="label-icon">🔄</span>
+                <span className="label-icon">📄</span>
                 Texte contrôle cookies
               </label>
               <textarea
@@ -363,7 +398,7 @@ const PrivacyEditor = ({ onClose }) => {
             <div className="cards-grid">
               <div className="card-editor">
                 <div className="card-header">
-                  <span className="card-icon">🔐</span>
+                  <span className="card-icon">🔒</span>
                   <h5>Fonctionnalité 1</h5>
                 </div>
                 <div className="form-group">
@@ -439,28 +474,20 @@ const PrivacyEditor = ({ onClose }) => {
           </div>
         );
 
-      // ... (les autres sections suivent le même pattern)
-
       default:
-        return (
-          <div className="section-content">
-            <div className="form-group">
-              <label className="form-label">
-                <span className="label-icon">📝</span>
-                Contenu de la section
-              </label>
-              <textarea
-                value={privacyData[`${activeSection}Text`] || ''}
-                onChange={(e) => setPrivacyData({...privacyData, [`${activeSection}Text`]: e.target.value})}
-                className="form-textarea"
-                rows="6"
-                placeholder="Éditez le contenu de cette section..."
-              />
-            </div>
-          </div>
-        );
+        return null;
     }
   };
+
+  if (loading) {
+    return (
+      <div className="privacy-editor">
+        <div className="loading-container">
+          <p>⏳ Chargement des données...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="privacy-editor">
@@ -471,8 +498,15 @@ const PrivacyEditor = ({ onClose }) => {
         </div>
       </div>
 
+      {error && (
+        <div className="error-banner">
+          <span>⚠️</span>
+          <p>{error}</p>
+          <button onClick={() => setError(null)}>✕</button>
+        </div>
+      )}
+
       <div className="editor-layout">
-        {/* Navigation latérale */}
         <div className="editor-sidebar">
           <div className="sidebar-header">
             <span>📑 Sections</span>
@@ -491,7 +525,6 @@ const PrivacyEditor = ({ onClose }) => {
           </div>
         </div>
 
-        {/* Contenu principal */}
         <div className="editor-main">
           <div className="section-header">
             <h3>
@@ -502,20 +535,29 @@ const PrivacyEditor = ({ onClose }) => {
 
           {renderSectionContent()}
 
-          {/* Actions globales */}
           <div className="editor-actions">
-            <button className="save-btn" onClick={handleSave}>
+            <button 
+              className="save-btn" 
+              onClick={handleSave}
+              disabled={saving}
+            >
               <span className="btn-icon">💾</span>
-              Sauvegarder
+              {saving ? 'Sauvegarde...' : 'Sauvegarder'}
             </button>
-            <button className="preview-btn">
-              <span className="btn-icon">👁️</span>
-              Aperçu
+            <button 
+              className="reset-btn" 
+              onClick={loadPrivacyData}
+              disabled={saving || loading}
+            >
+              <span className="btn-icon">🔄</span>
+              Recharger
             </button>
-            <button className="close-btn" onClick={onClose}>
-              <span className="btn-icon">❌</span>
-              Fermer
-            </button>
+            {onClose && (
+              <button className="close-btn" onClick={onClose}>
+                <span className="btn-icon">✕</span>
+                Fermer
+              </button>
+            )}
           </div>
         </div>
       </div>

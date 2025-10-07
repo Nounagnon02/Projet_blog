@@ -146,9 +146,9 @@ const ArticleList = () => {
             {filteredArticles.map(article => (
               <article key={article.id} className="article-card">
                 <div className="article-image-container">
-                  {article.image ? (
+                  {article.image1 ? (
                     <img 
-                      src={`http://localhost:8000/storage/${article.image1}`}
+                      src={`http://localhost:8000/storage/app//public/${article.image1}`}
                       alt={article.title}
                       className="article-image"
                       onError={(e) => {
