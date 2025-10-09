@@ -63,16 +63,19 @@ Route::prefix('admin')->group(function () {
     // Gestion de la page "À Propos"
     Route::prefix('about')->group(function () {
         Route::put('/', [AboutPageController::class, 'update']);
+        Route::get('/',[AboutPageController::class, 'index']);
     });
 
     // Gestion de la page "Contact"
     Route::prefix('contact')->group(function () {
         Route::put('/', [ContactPageController::class, 'update']);
+        Route::get('/',[ContactPageController::class, 'index']);
     });
 
     // Gestion de la page "Politique de confidentialité"
     Route::prefix('privacy')->group(function () {
         Route::put('/', [PrivacyPageController::class, 'update']);
+        Route::get('/',[PrivacyPageController::class, 'index']);
     });
 
     // Gestion des annonces

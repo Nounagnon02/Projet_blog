@@ -1,17 +1,133 @@
-import React from 'react';
+import React ,{useState, useEffect} from 'react';
 import './Privacy.css';
+import { privacyPageAPI } from '../components/Admin/apiService';
+
 
 const Privacy = () => {
+
+    const [privacyData, setPrivacyData] = useState({
+        	
+            hero_title:'',	
+            hero_subtitle	:'',
+            hero_description:'',
+            collecte_title:'',
+            collecte_description:'',	
+            tech_info_1:'',
+            tech_info_2:'',
+            tech_info_3:'',
+            tech_info_4	:'',
+            auteurs_info_1:'',	
+            auteurs_info_2:'',
+            auteurs_info_3:'',
+            auteurs_info_4	:'',
+            cookies_title	:'',
+            cookies_warning:'',
+            analytics_title	:'',
+            analytics_desc	:'',
+            adsense_title:'',
+            adsense_desc:'',
+            cookie_control_text:'',
+            protection_title:'',	
+            protection_feature_1:'',
+            protection_desc_1:'',
+            protection_feature_2	:'',
+            protection_desc_2	:'',
+            protection_feature_3:'',
+            protection_desc_3:'',
+            liens_title	:'',
+            liens_description :'',
+            lien_1:'',
+            lien_2	:'',
+            lien_3	:'',
+            liens_disclaimer :'',
+            consent_title:'',
+            consent_text	:'',
+            consent_note	:'',
+            contact_title	:'',
+            contact_text:'',
+            contact_email	:'',
+            contact_method:'',	
+            update_title:'',
+            update_date:'',
+            update_note:'',
+    });
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+      loadPrivacyData();
+  }, []);
+      
+    const loadPrivacyData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await privacyPageAPI.get();
+            
+        if (response.success && response.data) {
+              setPrivacyData({
+                hero_title: response.data.hero_title ||  "",
+                hero_subtitle	:response.data.hero_subtitle ||  "",
+                hero_description:response.data.hero_description ||  "",
+                collecte_title:response.data.collecte_title ||  "",
+                collecte_description:response.data.collecte_description ||  "",
+                tech_info_1:response.data.tech_info_1 ||  "",
+                tech_info_2:response.data.tech_info_2 ||  "",
+                tech_info_3:response.data.tech_info_3 ||  "",
+                tech_info_4	:response.data.tech_info_4 ||  "",
+                auteurs_info_1:response.data.auteurs_info_1 ||  "",
+                auteurs_info_2:response.data.auteurs_info_2 ||  "",
+                auteurs_info_3:response.data.auteurs_info_3 ||  "",
+                auteurs_info_4	:response.data.auteurs_info_4 ||  "",
+                cookies_title	:response.data.cookies_title ||  "",
+                cookies_warning:response.data.cookies_warning ||  "",
+                analytics_title	:response.data.analytics_title ||  "",
+                analytics_desc	:response.data.analytics_desc ||  "",
+                adsense_title:response.data.adsense_title ||  "",
+                adsense_desc:response.data.adsense_desc ||  "",
+                cookie_control_text:response.data.cookie_control_text ||  "",
+                protection_title:response.data.protection_title ||  "",
+                protection_feature_1:response.data.protection_feature_1 ||  "",
+                protection_desc_1:response.data.protection_desc_1 ||  "",
+                protection_feature_2	:response.data.protection_feature_2 ||  "",
+                protection_desc_2	:response.data.protection_desc_2 ||  "",
+                protection_feature_3:response.data.protection_feature_3 ||  "",
+                protection_desc_3:response.data.protection_desc_3 ||  "",
+                liens_title	:response.data.liens_title ||  "",
+                liens_description :response.data.liens_description ||  "",
+                lien_1:response.data.lien_1 ||  "",
+                lien_2	:response.data.lien_2 ||  "",
+                lien_3	:response.data.lien_3 ||  "",
+                liens_disclaimer :response.data.liens_disclaimer ||  "",
+                consent_title:response.data.consent_title ||  "",
+                consent_text	:response.data.consent_text ||  "",
+                consent_note	:response.data.consent_note ||  "",
+                contact_title	:response.data.contact_title ||  "",
+                contact_text:response.data.contact_text ||  "",
+                contact_email	:response.data.contact_email ||  "",
+                contact_method:response.data.contact_method ||  "",
+                update_title:response.data.update_title ||  "",
+                update_date:response.data.update_date ||  "",
+                update_note:response.data.update_note ||  "",
+                  
+                });
+                }
+          } catch (err) {
+            console.error('Erreur lors du chargement:', err);
+            setError('Impossible de charger les données. Veuillez réessayer.');
+          } finally {
+            setLoading(false);
+          }
+        };
   return (
     <div className="privacy-page">
       {/* Hero Section */}
       <section className="privacy-hero">
         <div className="hero-content">
-          <h1>🔒 Politique de Confidentialité</h1>
-          <p className="hero-subtitle">Bienvenue sur <strong>Légendes oubliées</strong></p>
+          <h1>{privacyData.hero_title}</h1>
+          <p className="hero-subtitle">{privacyData.hero_subtitle}</p>
           <p className="hero-description">
-            La confidentialité de nos visiteurs est très importante. 
-            Cette politique explique comment nous traitons vos informations.
+            {privacyData.hero_description}
           </p>
         </div>
       </section>
@@ -22,12 +138,11 @@ const Privacy = () => {
           {/* Section Collecte */}
           <section className="privacy-section">
             <div className="section-header">
-              <h2>Collecte d'Informations</h2>
+              <h2>{privacyData.collecte_title}</h2>
             </div>
             <div className="section-content">
               <p>
-                <strong>Pour les lecteurs :</strong> Aucune information personnelle n'est collectée. 
-                Vous pouvez lire nos histoires librement sans créer de compte.
+                 {privacyData.collecte_description}.
               </p>
               
               <div className="info-cards">
@@ -36,10 +151,10 @@ const Privacy = () => {
                   <div className="card-content">
                     <h4>Informations techniques</h4>
                     <ul>
-                      <li>Adresse IP (anonymisée)</li>
-                      <li>Type de navigateur</li>
-                      <li>Pages visitées</li>
-                      <li>Durée de lecture</li>
+                      <li>{privacyData.tech_info_1}</li>
+                      <li>{privacyData.tech_info_2}</li>
+                      <li>{privacyData.tech_info_3}</li>
+                      <li>{privacyData.tech_info_4}</li>
                     </ul>
                   </div>
                 </div>
@@ -49,10 +164,10 @@ const Privacy = () => {
                   <div className="card-content">
                     <h4>Pour les auteurs uniquement</h4>
                     <ul>
-                      <li>Nom et prénom</li>
-                      <li>Adresse email</li>
-                      <li>Historique des publications</li>
-                      <li>Photos de profil (optionnelles)</li>
+                      <li>{privacyData.auteurs_info_1}</li>
+                      <li>{privacyData.auteurs_info_2}</li>
+                      <li>{privacyData.auteurs_info_3}</li>
+                      <li>{privacyData.auteurs_info_4}</li>
                     </ul>
                   </div>
                 </div>
@@ -63,35 +178,25 @@ const Privacy = () => {
           {/* Section Cookies */}
           <section className="privacy-section">
             <div className="section-header">
-              <h2>Cookies et Services Tiers</h2>
+              <h2>{privacyData.cookies_title}</h2>
             </div>
             <div className="section-content">
               <div className="warning-note">
                 <div className="warning-text">
-                  <strong>Important :</strong> Nous utilisons des services tiers pour améliorer votre expérience.
+                  {privacyData.cookies_warning}
                 </div>
               </div>
               
               <div className="services-grid">
                 <div className="service-item">
-                  <h4>Google Analytics</h4>
-                  <p>Analyse anonyme du trafic pour comprendre les préférences de lecture</p>
+                  <h4>{privacyData.analytics_title}</h4>
+                  <p>{privacyData.analytics_desc}</p>
                 </div>
                 
                 <div className="service-item">
-                  <h4>Google AdSense</h4>
-                  <p>Publicités pertinentes pour soutenir financièrement la plateforme</p>
+                  <h4>{privacyData.adsense_title}</h4>
+                  <p>{privacyData.adsense_desc}</p>
                 </div>
-              </div>
-              
-              <div className="cookie-control">
-                <h4>🔄 Contrôle des Cookies</h4>
-                <p>
-                  Vous pouvez désactiver les cookies publicitaires en visitant :<br/>
-                  <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer">
-                    👉 https://policies.google.com/technologies/ads
-                  </a>
-                </p>
               </div>
             </div>
           </section>
@@ -99,31 +204,31 @@ const Privacy = () => {
           {/* Section Protection */}
           <section className="privacy-section">
             <div className="section-header">
-              <h2>Protection des Données</h2>
+              <h2>{privacyData.protection_title}</h2>
             </div>
             <div className="section-content">
               <div className="protection-features">
                 <div className="feature">
                   <span className="feature-icon">🔐</span>
                   <div>
-                    <h4>Chiffrement SSL</h4>
-                    <p>Toutes les connexions sont sécurisées</p>
+                    <h4>{privacyData.protection_feature_1}</h4>
+                    <p>{privacyData.protection_desc_1}</p>
                   </div>
                 </div>
                 
                 <div className="feature">
                   <span className="feature-icon">📚</span>
                   <div>
-                    <h4>Respect des œuvres</h4>
-                    <p>Les histoires publiées restent la propriété de leurs auteurs</p>
+                    <h4>{privacyData.protection_feature_2}</h4>
+                    <p>{privacyData.protection_desc_2}</p>
                   </div>
                 </div>
                 
                 <div className="feature">
                   <span className="feature-icon">👁️</span>
                   <div>
-                    <h4>Transparence totale</h4>
-                    <p>Nous ne vendons ni ne partageons vos données</p>
+                    <h4>{privacyData.protection_feature_3}</h4>
+                    <p>{privacyData.protection_desc_3}</p>
                   </div>
                 </div>
               </div>
@@ -133,19 +238,19 @@ const Privacy = () => {
           {/* Section Liens Externes */}
           <section className="privacy-section">
             <div className="section-header">
-              <h2>Liens Externes</h2>
+              <h2>{privacyData.liens_title}</h2>
             </div>
             <div className="section-content">
               <p>
-                Notre bibliothèque peut contenir des liens vers des sites externes :
+                {privacyData.liens_description}
               </p>
               <div className="external-links">
-                <div className="link-type">🎵 Plateformes de musique</div>
-                <div className="link-type">📱 Réseaux sociaux des auteurs</div>
-                <div className="link-type">🌐 Autres ressources littéraires</div>
+                <div className="link-type">{privacyData.lien_1}</div>
+                <div className="link-type">{privacyData.lien_2}</div>
+                <div className="link-type">{privacyData.lien_3}</div>
               </div>
               <p className="disclaimer">
-                <strong>Note :</strong> Nous ne sommes pas responsables des pratiques de confidentialité de ces sites tiers.
+                {privacyData.liens_disclaimer}
               </p>
             </div>
           </section>
@@ -153,16 +258,16 @@ const Privacy = () => {
           {/* Section Consentement */}
           <section className="privacy-section">
             <div className="section-header">
-              <h2>Consentement</h2>
+              <h2>{privacyData.consent_title}</h2>
             </div>
             <div className="section-content">
               <div className="consent-card">
                 <p>
-                  En utilisant <strong>StoryHub</strong>, vous acceptez notre politique de confidentialité.
+                  {privacyData.consent_text}
                 </p>
                 <div className="consent-note">
                   <span className="note-icon">💡</span>
-                  <span>Lecture libre et anonyme - Aucune inscription requise</span>
+                  {privacyData.consent_note}
                 </div>
               </div>
             </div>
@@ -172,21 +277,21 @@ const Privacy = () => {
           <section className="privacy-section">
             <div className="section-header">
               <div className="section-icon">📩</div>
-              <h2>Contact</h2>
+              <h2>{privacyData.contact_title}</h2>
             </div>
             <div className="section-content">
               <div className="contact-card">
                 <p>
-                  Pour toute question concernant la confidentialité :
+                  {privacyData.contact_text}
                 </p>
                 <div className="contact-info">
                   <div className="contact-method">
                     <span className="method-icon">📧</span>
-                    <span>Email : privacy@storyhub.com</span>
+                    <span>Email : {privacyData.contact_email}</span>
                   </div>
                   <div className="contact-method">
                     <span className="method-icon">💬</span>
-                    <span>Via notre page de contact</span>
+                    <span>{privacyData.contact_method}</span>
                   </div>
                 </div>
               </div>
@@ -198,11 +303,11 @@ const Privacy = () => {
             <div className="update-card">
               <div className="update-header">
                 <span className="update-icon">🔄</span>
-                <h3>Dernière mise à jour</h3>
+                <h3>{privacyData.update_title}</h3>
               </div>
-              <p className="update-date"><strong>15 Janvier 2024</strong></p>
+              <p className="update-date"><strong>{privacyData.update_date}</strong></p>
               <p className="update-note">
-                Nous révisons régulièrement cette politique pour garantir votre protection.
+                {privacyData.update_note}
               </p>
             </div>
           </section>

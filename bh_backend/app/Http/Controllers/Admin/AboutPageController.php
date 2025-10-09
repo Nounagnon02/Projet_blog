@@ -109,4 +109,8 @@ class AboutPageController extends Controller
             ], 500);
         }
     }
+
+    public function index(){
+        return AboutPage::all();
+    }
 }

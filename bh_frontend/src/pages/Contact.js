@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Contact.css';
+import Api from '../services/Api';
+import { contactPageAPI } from '../components/Admin/apiService';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -8,6 +10,34 @@ const Contact = () => {
     subject: '',
     message: ''
   });
+  const [contactData, setContactData] = useState({
+        hero_title: "",
+        hero_subtitle: "",
+        email: "",
+        email_subtitle: "",
+        phone: "",
+        phone_subtitle: "",
+        address: "",
+        address_subtitle: "",
+        social: "",
+        social_subtitle: "",
+        form_title: "",
+        form_subtitle: "",
+        faq_title: "",
+        faq_question_1: "",
+        faq_answer_1: "",
+        faq_question_2: "",
+        faq_answer_2: "",
+        faq_question_3: "",
+        faq_answer_3: "",
+        is_active: "",
+        ctaSubtitle: "",
+  });
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+	
+
 
   const handleChange = (e) => {
     setFormData({
@@ -15,6 +45,49 @@ const Contact = () => {
       [e.target.name]: e.target.value
     });
   };
+
+  useEffect(() => {
+      loadContactData();
+  }, []);
+      
+    const loadContactData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await contactPageAPI.get();
+            
+        if (response.success && response.data) {
+              setContactData({
+                hero_title: response.data.hero_title ||  "",
+                hero_subtitle: response.data.hero_subtitle ||  "",
+                email: response.data.email ||  "",
+                email_subtitle: response.data.email_subtitle ||  "",
+                phone: response.data.phone ||  "",
+                phone_subtitle: response.data.phone_subtitle ||  "",
+                address: response.data.address ||  "",
+                address_subtitle: response.data.address_subtitle ||  "",
+                social: response.data.social ||  "",
+                social_subtitle: response.data.social_subtitle ||  "",
+                form_title: response.data.form_title ||  "",
+                form_subtitle: response.data.form_subtitle ||  "",
+                faq_title:  response.data.faq_title || "",
+                faq_question_1: response.data.faq_question_1 ||  "",
+                faq_answer_1: response.data.faq_answer_1 ||  "",
+                faq_question_2: response.data.faq_question_2 ||  "",
+                faq_answer_2: response.data.faq_answer_2 || "",
+                faq_question_3:response.data.faq_question_3 ||  "",
+                faq_answer_3: response.data.faq_answer_3 || "",
+                is_active: response.data.is_active || "",
+              
+              });
+            }
+          } catch (err) {
+            console.error('Erreur lors du chargement:', err);
+            setError('Impossible de charger les données. Veuillez réessayer.');
+          } finally {
+            setLoading(false);
+          }
+        };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,8 +100,8 @@ const Contact = () => {
       {/* Hero */}
       <section className="contact-hero">
         <div className="hero-content">
-          <h1>📞 Contactez-Nous</h1>
-          <p>Nous sommes là pour répondre à toutes vos questions</p>
+          <h1>{contactData.hero_title}</h1>
+          <p>{contactData.hero_subtitle}</p>
         </div>
       </section>
 
@@ -38,37 +111,37 @@ const Contact = () => {
           <div className="info-card">
             <div className="info-icon">📧</div>
             <h3>Email</h3>
-            <p>contact@storyhub.com</p>
-            <span>Réponse sous 24h</span>
+            <p>{contactData.email}</p>
+            <span>{contactData.email_subtitle}</span>
           </div>
           
           <div className="info-card">
             <div className="info-icon">📱</div>
             <h3>Téléphone</h3>
-            <p>+33 1 23 45 67 89</p>
-            <span>Lun-Ven • 9h-18h</span>
+            <p>{contactData.phone}</p>
+            <span>{contactData.phone_subtitle}</span>
           </div>
           
           <div className="info-card">
             <div className="info-icon">🏢</div>
             <h3>Adresse</h3>
-            <p>123 Avenue des Histoires</p>
-            <span>75001 Paris, France</span>
+            <p>{contactData.address}</p>
+            <span>{contactData.address_subtitle}</span>
           </div>
           
           <div className="info-card">
             <div className="info-icon">💬</div>
             <h3>Réseaux sociaux</h3>
-            <p>@StoryHubOfficiel</p>
-            <span>Message direct</span>
+            <p>{contactData.social}</p>
+            <span>{contactData.social_subtitle}</span>
           </div>
         </section>
 
         {/* Formulaire de contact */}
         <section className="contact-form-section">
           <div className="form-header">
-            <h2>✍️ Envoyez-nous un message</h2>
-            <p>Remplissez le formulaire ci-dessous</p>
+            <h2>✍️ {contactData.form_title}</h2>
+            <p>{contactData.form_subtitle}</p>
           </div>
           
           <form onSubmit={handleSubmit} className="contact-form">
@@ -132,19 +205,19 @@ const Contact = () => {
       {/* FAQ */}
       <section className="faq-section">
         <div className="container">
-          <h2>Questions Fréquentes</h2>
+          <h2>{contactData.faq_title}</h2>
           <div className="faq-grid">
             <div className="faq-item">
-              <h4>Comment publier une histoire ?</h4>
-              <p>Créez un compte auteur et soumettez votre manuscrit via notre plateforme.</p>
+              <h4>{contactData.faq_question_1}</h4>
+              <p>{contactData.faq_answer_1}</p>
             </div>
             <div className="faq-item">
-              <h4>Est-ce gratuit ?</h4>
-              <p>Oui ! La lecture et la publication sont entièrement gratuites.</p>
+              <h4>{contactData.faq_question_2}</h4>
+              <p>{contactData.faq_answer_2}</p>
             </div>
             <div className="faq-item">
-              <h4>Qui peut lire mes histoires ?</h4>
-              <p>Tous les utilisateurs inscrits peuvent découvrir vos créations.</p>
+              <h4>{contactData.faq_question_3}</h4>
+              <p>{contactData.faq_answer_3}</p>
             </div>
           </div>
         </div>
