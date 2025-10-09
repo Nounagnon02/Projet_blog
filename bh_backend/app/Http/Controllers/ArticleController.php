@@ -16,10 +16,29 @@ class ArticleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getAllHistories()
+    /*public function getAllHistories()
     {
         return Article::all();
+    }*/
+    public function getAllHistories()
+    {
+        try {
+            $histoire = \App\Models\Article::with(['category', 'author'])->get()->map(function($histoire) {
+                if ($histoire->image1) {
+                    $histoire->image_url1 = asset('storage/' . $histoire->image1);
+                }
+                if ($histoire->image2) {
+                    $histoire->image_url2 = asset('storage/' . $histoire->image2);
+                }
+                return $histoire;
+            });
+            return response()->json($histoire);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error fetching histories'], 500);
+        }
     }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -39,12 +58,16 @@ class ArticleController extends Controller
             'files' => $request->allFiles()
         ]);
 
+        // Support alternative content field from frontend (content1)
+        
+
         $validated = $request->validate([
             'title' => 'required|string|min:2|unique:articles,title',
-            'content' => 'required|string|min:10',
+            'content1' => 'required|string|min:10',
+            'content2' => 'required|string|min:10',
             'short_description' => 'required|string|max:1000',
-            'image1' => 'required|file|image|mimes:jpeg,png,jpg|max:5120',
-            'image2' => 'required|file|image|mimes:jpeg,png,jpg|max:5120',
+            'image1' => 'required|file|image|mimes:jpeg,png,jpg|max:20480',
+            'image2' => 'required|file|image|mimes:jpeg,png,jpg|max:20480',
             'category_id' => 'required|exists:categories,id',
             'author_id' => 'required|exists:users,id',
             'date_published' => 'nullable|date',
@@ -86,7 +109,7 @@ class ArticleController extends Controller
         // CORRECTION : Générer des noms de fichiers différents pour chaque image
         $timestamp = time();
         $sluggedTitle = Str::slug($request->title);
-        
+
         $filename1 = $timestamp . '_1_' . $sluggedTitle . '.' . $file1->getClientOriginalExtension();
         $filename2 = $timestamp . '_2_' . $sluggedTitle . '.' . $file2->getClientOriginalExtension();
 
@@ -154,8 +177,8 @@ class ArticleController extends Controller
                 'title' => 'required|string|min:2|unique:articles,title',
                 'content' => 'required|string|min:10',
                 'short_description' => 'required|string|max:1000',
-                'image1' => 'required|file|image|mimes:jpeg,png,jpg|max:5120',
-                'image2' => 'required|file|image|mimes:jpeg,png,jpg|max:5120',
+                'image1' => 'required|file|image|mimes:jpeg,png,jpg|max:16384',
+                'image2' => 'required|file|image|mimes:jpeg,png,jpg|max:16384',
                 'category_id' => 'required|exists:categories,id',
                 'author_id' => 'required|exists:users,id',
                 'date_published' => 'nullable|date',
@@ -199,7 +222,7 @@ class ArticleController extends Controller
             // Generate unique filenames for each image
             $timestamp = time();
             $sluggedTitle = Str::slug($request->title);
-            
+
             $filename1 = $timestamp . '_1_' . $sluggedTitle . '.' . $file1->getClientOriginalExtension();
             $filename2 = $timestamp . '_2_' . $sluggedTitle . '.' . $file2->getClientOriginalExtension();
 
@@ -219,7 +242,7 @@ class ArticleController extends Controller
             $validated['image2'] = $path2;
 
             Log::info('Images uploaded successfully', [
-                'path1' => $path1, 
+                'path1' => $path1,
                 'path2' => $path2
             ]);
 
@@ -271,8 +294,8 @@ class ArticleController extends Controller
                 'title' => 'required|string|min:2|unique:articles,title,' . $id,
                 'content' => 'required|string|min:10',
                 'short_description' => 'string|max:1000',
-                'image1' => 'nullable|file|image|mimes:jpeg,png,jpg|max:5120',
-                'image2' => 'nullable|file|image|mimes:jpeg,png,jpg|max:5120',
+                'image1' => 'nullable|file|image|mimes:jpeg,png,jpg|max:16384',
+                'image2' => 'nullable|file|image|mimes:jpeg,png,jpg|max:16384',
                 'category_id' => 'required|exists:categories,id',
                 'author_id' => 'required|exists:users,id',
                 'date_published' => 'nullable|date',
@@ -286,7 +309,7 @@ class ArticleController extends Controller
             // Handle image uploads separately
             if ($request->hasFile('image1')) {
                 $file1 = $request->file('image1');
-                
+
                 // Delete old image if exists
                 if ($histoires->image1 && Storage::disk('public')->exists($histoires->image1)) {
                     Storage::disk('public')->delete($histoires->image1);
@@ -295,14 +318,14 @@ class ArticleController extends Controller
                 $timestamp = time();
                 $sluggedTitle = Str::slug($request->title ?? $histoires->title);
                 $filename1 = $timestamp . '_1_' . $sluggedTitle . '.' . $file1->getClientOriginalExtension();
-                
+
                 $path1 = $file1->storeAs('histoires_images', $filename1, 'public');
                 $validated['image1'] = $path1;
             }
-            
+
             if ($request->hasFile('image2')) {
                 $file2 = $request->file('image2');
-                
+
                 // Delete old image if exists
                 if ($histoires->image2 && Storage::disk('public')->exists($histoires->image2)) {
                     Storage::disk('public')->delete($histoires->image2);
@@ -311,7 +334,7 @@ class ArticleController extends Controller
                 $timestamp = time();
                 $sluggedTitle = Str::slug($request->title ?? $histoires->title);
                 $filename2 = $timestamp . '_2_' . $sluggedTitle . '.' . $file2->getClientOriginalExtension();
-                
+
                 $path2 = $file2->storeAs('histoires_images', $filename2, 'public');
                 $validated['image2'] = $path2;
             }

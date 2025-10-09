@@ -30,11 +30,6 @@ const Contact = () => {
           <h1>📞 Contactez-Nous</h1>
           <p>Nous sommes là pour répondre à toutes vos questions</p>
         </div>
-        <div className="contact-decoration">
-          <div className="floating-email">📧</div>
-          <div className="floating-phone">📱</div>
-          <div className="floating-chat">💬</div>
-        </div>
       </section>
 
       <div className="contact-container">
@@ -137,7 +132,7 @@ const Contact = () => {
       {/* FAQ */}
       <section className="faq-section">
         <div className="container">
-          <h2>❓ Questions Fréquentes</h2>
+          <h2>Questions Fréquentes</h2>
           <div className="faq-grid">
             <div className="faq-item">
               <h4>Comment publier une histoire ?</h4>

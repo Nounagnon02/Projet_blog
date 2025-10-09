@@ -1,3 +1,5 @@
+@import './SharedEditor.css';
+
 .privacy-editor {
   background: white;
   border-radius: 12px;

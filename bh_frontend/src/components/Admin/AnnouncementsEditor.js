@@ -1,65 +1,100 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { announcementsAPI } from './apiService';
 import './AnnouncementsEditor.css';
 
 const AnnouncementsEditor = ({ onClose }) => {
-  const [announcements, setAnnouncements] = useState([
-    {
-      id: 1,
-      title: "🎉 Nouveautés du mois",
-      content: "Découvrez nos nouvelles histoires publiées ce mois-ci !",
-      active: true,
-      type: "promotion"
-    },
-    {
-      id: 2,
-      title: "📢 Concours d'écriture",
-      content: "Participez à notre concours mensuel et gagnez des prix !",
-      active: true,
-      type: "event"
-    }
-  ]);
-
+  const [announcements, setAnnouncements] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [newAnnouncement, setNewAnnouncement] = useState({
     title: '',
     content: '',
     type: 'info'
   });
 
-  const addAnnouncement = () => {
-    if (newAnnouncement.title && newAnnouncement.content) {
-      setAnnouncements([
-        ...announcements,
-        {
-          id: Date.now(),
-          ...newAnnouncement,
-          active: true
-        }
-      ]);
-      setNewAnnouncement({ title: '', content: '', type: 'info' });
-    }
-  };
+  useEffect(() => {
+    loadAnnouncements();
+  }, []);
 
-  const toggleAnnouncement = (id) => {
-    setAnnouncements(announcements.map(ann => 
-      ann.id === id ? { ...ann, active: !ann.active } : ann
-    ));
-  };
-
-  const deleteAnnouncement = (id) => {
-    setAnnouncements(announcements.filter(ann => ann.id !== id));
-  };
-
-  const handleSave = async () => {
+  const loadAnnouncements = async () => {
     try {
-      // TODO: Sauvegarder en base de données
-      console.log('Annonces sauvegardées:', announcements);
-      alert('✅ Annonces sauvegardées !');
-      if (onClose) onClose();
-    } catch (error) {
-      console.error('Erreur:', error);
-      alert('❌ Erreur lors de la sauvegarde');
+      setLoading(true);
+      setError(null);
+      const response = await announcementsAPI.getAll();
+      
+      if (response.success) {
+        setAnnouncements(response.data);
+      }
+    } catch (err) {
+      console.error('Erreur lors du chargement:', err);
+      setError('Impossible de charger les annonces. Veuillez réessayer.');
+    } finally {
+      setLoading(false);
     }
   };
+
+  const addAnnouncement = async () => {
+    if (!newAnnouncement.title || !newAnnouncement.content) {
+      alert('⚠️ Veuillez remplir tous les champs');
+      return;
+    }
+
+    try {
+      const response = await announcementsAPI.create(newAnnouncement);
+      
+      if (response.success) {
+        setAnnouncements([...announcements, response.data]);
+        setNewAnnouncement({ title: '', content: '', type: 'info' });
+        alert('✅ Annonce créée avec succès !');
+      }
+    } catch (err) {
+      console.error('Erreur lors de la création:', err);
+      alert('❌ Erreur lors de la création de l\'annonce');
+    }
+  };
+
+  const toggleAnnouncement = async (id) => {
+    try {
+      const response = await announcementsAPI.toggleActive(id);
+      
+      if (response.success) {
+        setAnnouncements(announcements.map(ann => 
+          ann.id === id ? response.data : ann
+        ));
+      }
+    } catch (err) {
+      console.error('Erreur lors du changement de statut:', err);
+      alert('❌ Erreur lors du changement de statut');
+    }
+  };
+
+  const deleteAnnouncement = async (id) => {
+    if (!window.confirm('Êtes-vous sûr de vouloir supprimer cette annonce ?')) {
+      return;
+    }
+    
+    try {
+      const response = await announcementsAPI.delete(id);
+      
+      if (response.success) {
+        setAnnouncements(announcements.filter(ann => ann.id !== id));
+        alert('✅ Annonce supprimée avec succès !');
+      }
+    } catch (err) {
+      console.error('Erreur lors de la suppression:', err);
+      alert('❌ Erreur lors de la suppression');
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="announcements-editor">
+        <div className="loading-container">
+          <p>⏳ Chargement des annonces...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="announcements-editor">
@@ -69,6 +104,14 @@ const AnnouncementsEditor = ({ onClose }) => {
           <p>Créez et gérez les annonces affichées sur votre site</p>
         </div>
       </div>
+
+      {error && (
+        <div className="error-banner">
+          <span>⚠️</span>
+          <p>{error}</p>
+          <button onClick={() => setError(null)}>✕</button>
+        </div>
+      )}
 
       <div className="editor-content">
         {/* Formulaire d'ajout */}
@@ -119,59 +162,72 @@ const AnnouncementsEditor = ({ onClose }) => {
 
         {/* Liste des annonces */}
         <section className="announcements-list">
-          <h3>📋 Annonces Actives</h3>
-          <div className="announcements-grid">
-            {announcements.map(announcement => (
-              <div key={announcement.id} className={`announcement-card ${announcement.type} ${!announcement.active ? 'inactive' : ''}`}>
-                <div className="card-header">
-                  <div className="card-title">
-                    <span className={`type-icon ${announcement.type}`}>
-                      {announcement.type === 'info' && 'ℹ️'}
-                      {announcement.type === 'promotion' && '🎉'}
-                      {announcement.type === 'event' && '📢'}
-                      {announcement.type === 'warning' && '⚠️'}
+          <h3>📋 Annonces ({announcements.length})</h3>
+          
+          {announcements.length === 0 ? (
+            <div className="empty-state">
+              <p>Aucune annonce pour le moment</p>
+              <p>Créez votre première annonce ci-dessus</p>
+            </div>
+          ) : (
+            <div className="announcements-grid">
+              {announcements.map(announcement => (
+                <div 
+                  key={announcement.id} 
+                  className={`announcement-card ${announcement.type} ${!announcement.active ? 'inactive' : ''}`}
+                >
+                  <div className="card-header">
+                    <div className="card-title">
+                      <span className={`type-icon ${announcement.type}`}>
+                        {announcement.type === 'info' && 'ℹ️'}
+                        {announcement.type === 'promotion' && '🎉'}
+                        {announcement.type === 'event' && '📢'}
+                        {announcement.type === 'warning' && '⚠️'}
+                      </span>
+                      <h4>{announcement.title}</h4>
+                    </div>
+                    <div className="card-actions">
+                      <button 
+                        onClick={() => toggleAnnouncement(announcement.id)}
+                        className={`toggle-btn ${announcement.active ? 'active' : 'inactive'}`}
+                        title={announcement.active ? 'Désactiver' : 'Activer'}
+                      >
+                        {announcement.active ? '👁️' : '👁️‍🗨️'}
+                      </button>
+                      <button 
+                        onClick={() => deleteAnnouncement(announcement.id)}
+                        className="delete-btn"
+                        title="Supprimer"
+                      >
+                        🗑️
+                      </button>
+                    </div>
+                  </div>
+                  <div className="card-content">
+                    <p>{announcement.content}</p>
+                  </div>
+                  <div className="card-footer">
+                    <span className={`status ${announcement.active ? 'active' : 'inactive'}`}>
+                      {announcement.active ? '🟢 Active' : '🔴 Inactive'}
                     </span>
-                    <h4>{announcement.title}</h4>
-                  </div>
-                  <div className="card-actions">
-                    <button 
-                      onClick={() => toggleAnnouncement(announcement.id)}
-                      className={`toggle-btn ${announcement.active ? 'active' : 'inactive'}`}
-                    >
-                      {announcement.active ? '👁️' : '👁️‍🗨️'}
-                    </button>
-                    <button 
-                      onClick={() => deleteAnnouncement(announcement.id)}
-                      className="delete-btn"
-                    >
-                      🗑️
-                    </button>
+                    <span className="date">
+                      Créée le {new Date(announcement.created_at).toLocaleDateString('fr-FR')}
+                    </span>
                   </div>
                 </div>
-                <div className="card-content">
-                  <p>{announcement.content}</p>
-                </div>
-                <div className="card-footer">
-                  <span className={`status ${announcement.active ? 'active' : 'inactive'}`}>
-                    {announcement.active ? '🟢 Active' : '🔴 Inactive'}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </section>
       </div>
 
       {/* Actions */}
       <div className="editor-actions">
-        <button className="save-btn" onClick={handleSave}>
-          💾 Sauvegarder les annonces
-        </button>
-        <button className="preview-btn">
-          👁️ Aperçu du site
+        <button className="preview-btn" onClick={loadAnnouncements}>
+          🔄 Recharger
         </button>
         <button className="close-btn" onClick={onClose}>
-          ❌ Fermer
+          ✕ Fermer
         </button>
       </div>
     </div>

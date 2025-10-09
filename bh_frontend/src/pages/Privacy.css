@@ -1,6 +1,6 @@
 .privacy-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
 }
 
 .privacy-hero {
@@ -108,9 +108,14 @@
 }
 
 .section-header h2 {
+  font-size: 2rem;
+  font-weight: 800;
   color: #2d3748;
-  font-size: 1.8rem;
-  margin: 0;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .section-content {
@@ -341,7 +346,7 @@
 }
 
 .update-card {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
   color: white;
   border-radius: 15px;
   padding: 2rem;

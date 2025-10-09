@@ -11,15 +11,19 @@
 }
 
 .category-header h3 {
-  color: #2d3748;
+  color: #ffffff;
   font-size: 1.4rem;
   font-weight: 700;
   margin: 0;
 }
 
+.PremierH3{
+  color: #ffffff;
+}
+
 /* Bouton toggle */
 .toggle-add-btn {
-  background: #667eea;
+  background: #7be92c;
   color: white;
   border: none;
   padding: 0.6rem 1.2rem;
@@ -76,7 +80,7 @@
 }
 
 .simple-add-btn:disabled {
-  background: #a0aec0;
+  background: #2666ba;
   cursor: not-allowed;
 }
 

@@ -149,6 +149,156 @@ const ContactEditor = ({ onClose }) => {
                   <h5>Email</h5>
                 </div>
                 <div className="form-group">
+                  <label>Adresse email</label>
+                  <input
+                    type="email"
+                    value={contactData.email}
+                    onChange={(e) => setContactData({...contactData, email: e.target.value})}
+                    className="form-input"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Description</label>
+                  <input
+                    type="text"
+                    value={contactData.emailSubtitle}
+                    onChange={(e) => setContactData({...contactData, emailSubtitle: e.target.value})}
+                    className="form-input"
+                  />
+                </div>
+              </div>
+
+              <div className="card-editor">
+                <div className="card-header">
+                  <span className="card-icon">📱</span>
+                  <h5>Téléphone</h5>
+                </div>
+                <div className="form-group">
+                  <label>Numéro</label>
+                  <input
+                    type="text"
+                    value={contactData.phone}
+                    onChange={(e) => setContactData({...contactData, phone: e.target.value})}
+                    className="form-input"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Horaires</label>
+                  <input
+                    type="text"
+                    value={contactData.phoneSubtitle}
+                    onChange={(e) => setContactData({...contactData, phoneSubtitle: e.target.value})}
+                    className="form-input"
+                  />
+                </div>
+              </div>
+
+              <div className="card-editor">
+                <div className="card-header">
+                  <span className="card-icon">🏢</span>
+                  <h5>Adresse</h5>
+                </div>
+                <div className="form-group">
+                  <label>Adresse</label>
+                  <input
+                    type="text"
+                    value={contactData.address}
+                    onChange={(e) => setContactData({...contactData, address: e.target.value})}
+                    className="form-input"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Ville/Code postal</label>
+                  <input
+                    type="text"
+                    value={contactData.addressSubtitle}
+                    onChange={(e) => setContactData({...contactData, addressSubtitle: e.target.value})}
+                    className="form-input"
+                  />
+                </div>
+              </div>
+
+              <div className="card-editor">
+                <div className="card-header">
+                  <span className="card-icon">💬</span>
+                  <h5>Réseaux sociaux</h5>
+                </div>
+                <div className="form-group">
+                  <label>Compte</label>
+                  <input
+                    type="text"
+                    value={contactData.social}
+                    onChange={(e) => setContactData({...contactData, social: e.target.value})}
+                    className="form-input"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Description</label>
+                  <input
+                    type="text"
+                    value={contactData.socialSubtitle}
+                    onChange={(e) => setContactData({...contactData, socialSubtitle: e.target.value})}
+                    className="form-input"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'form':
+        return (
+          <div className="section-content">
+            <div className="form-group">
+              <label className="form-label">
+                <span className="label-icon">✏️</span>
+                Titre du formulaire
+              </label>
+              <input
+                type="text"
+                value={contactData.formTitle}
+                onChange={(e) => setContactData({...contactData, formTitle: e.target.value})}
+                className="form-input"
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">
+                <span className="label-icon">📝</span>
+                Sous-titre formulaire
+              </label>
+              <textarea
+                value={contactData.formSubtitle}
+                onChange={(e) => setContactData({...contactData, formSubtitle: e.target.value})}
+                className="form-textarea"
+                rows="2"
+              />
+            </div>
+          </div>
+        );
+
+      case 'faq':
+        return (
+          <div className="section-content">
+            <div className="form-group">
+              <label className="form-label">
+                <span className="label-icon">❓</span>
+                Titre FAQ
+              </label>
+              <input
+                type="text"
+                value={contactData.faqTitle}
+                onChange={(e) => setContactData({...contactData, faqTitle: e.target.value})}
+                className="form-input"
+              />
+            </div>
+
+            <div className="cards-grid">
+              <div className="card-editor">
+                <div className="card-header">
+                  <span className="card-icon">1</span>
+                  <h5>Question 1</h5>
+                </div>
+                <div className="form-group">
                   <label>Question</label>
                   <input
                     type="text"
@@ -276,6 +426,7 @@ const ContactEditor = ({ onClose }) => {
           <div className="section-header">
             <h3>
               {sections.find(s => s.id === activeSection)?.icon}
+              {' '}
               {sections.find(s => s.id === activeSection)?.name}
             </h3>
           </div>
@@ -290,6 +441,10 @@ const ContactEditor = ({ onClose }) => {
             >
               <span className="btn-icon">💾</span>
               {saving ? 'Sauvegarde...' : 'Sauvegarder'}
+            </button>
+            <button className="preview-btn">
+              <span className="btn-icon">👁️</span>
+              Aperçu
             </button>
             <button 
               className="reset-btn" 

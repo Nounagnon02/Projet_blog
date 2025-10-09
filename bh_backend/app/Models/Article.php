@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use PharIo\Manifest\Author;
 
 class Article extends Model
 {
@@ -12,7 +11,8 @@ class Article extends Model
 
     protected $fillable = [
         'title',
-        'content',
+        'content1',
+        'content2',
         'short_description',
         'image1',
         'image2',
@@ -21,19 +21,23 @@ class Article extends Model
         'date_published',
     ];
 
-    public function Auteur(){
+    public function author()
+    {
         return $this->belongsTo(User::class, 'author_id');
     }
 
-    public function Categories(){
-        return $this->belongsTo(Category::class);
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
-    public function Tags(){
+    public function tags()
+    {
         return $this->belongsToMany(Tag::class, 'article_tags');
     }
 
-    public function Commentaire(){
+    public function comments()
+    {
         return $this->hasMany(Commentaire::class);
     }
  }

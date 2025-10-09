@@ -27,11 +27,6 @@ const About = () => {
             </div>
           </div>
         </div>
-        <div className="hero-decoration">
-          <div className="floating-book">📖</div>
-          <div className="floating-pen">✍️</div>
-          <div className="floating-heart">💖</div>
-        </div>
       </section>
 
       {/* Notre Mission */}

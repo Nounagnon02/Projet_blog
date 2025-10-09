@@ -8,16 +8,11 @@ const Privacy = () => {
       <section className="privacy-hero">
         <div className="hero-content">
           <h1>🔒 Politique de Confidentialité</h1>
-          <p className="hero-subtitle">Bienvenue sur <strong>StoryHub</strong></p>
+          <p className="hero-subtitle">Bienvenue sur <strong>Légendes oubliées</strong></p>
           <p className="hero-description">
             La confidentialité de nos visiteurs est très importante. 
             Cette politique explique comment nous traitons vos informations.
           </p>
-        </div>
-        <div className="privacy-decoration">
-          <div className="floating-book">📖</div>
-          <div className="floating-pen">✍️</div>
-          <div className="floating-shield">🛡️</div>
         </div>
       </section>
 
@@ -27,7 +22,6 @@ const Privacy = () => {
           {/* Section Collecte */}
           <section className="privacy-section">
             <div className="section-header">
-              <div className="section-icon">📊</div>
               <h2>Collecte d'Informations</h2>
             </div>
             <div className="section-content">
@@ -69,12 +63,10 @@ const Privacy = () => {
           {/* Section Cookies */}
           <section className="privacy-section">
             <div className="section-header">
-              <div className="section-icon">🍪</div>
               <h2>Cookies et Services Tiers</h2>
             </div>
             <div className="section-content">
               <div className="warning-note">
-                <div className="warning-icon">⚠️</div>
                 <div className="warning-text">
                   <strong>Important :</strong> Nous utilisons des services tiers pour améliorer votre expérience.
                 </div>
@@ -107,7 +99,6 @@ const Privacy = () => {
           {/* Section Protection */}
           <section className="privacy-section">
             <div className="section-header">
-              <div className="section-icon">🛡️</div>
               <h2>Protection des Données</h2>
             </div>
             <div className="section-content">
@@ -142,7 +133,6 @@ const Privacy = () => {
           {/* Section Liens Externes */}
           <section className="privacy-section">
             <div className="section-header">
-              <div className="section-icon">🔗</div>
               <h2>Liens Externes</h2>
             </div>
             <div className="section-content">
@@ -163,7 +153,6 @@ const Privacy = () => {
           {/* Section Consentement */}
           <section className="privacy-section">
             <div className="section-header">
-              <div className="section-icon">✅</div>
               <h2>Consentement</h2>
             </div>
             <div className="section-content">

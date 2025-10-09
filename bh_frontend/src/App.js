@@ -17,7 +17,7 @@ function App() {
     <Router>
       <div className="app">
         <div className="app-content">
-          <Announcements />
+          
           <Header />
           
           <main className="main-content">

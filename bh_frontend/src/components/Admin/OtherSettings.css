@@ -1,3 +1,5 @@
+@import './SharedEditor.css';
+
 .other-settings {
   padding: 1rem 0;
 }
@@ -109,8 +111,12 @@
   border-radius: 15px 15px 0 0;
 }
 
+.PremierH3{
+  color: #ffffff;
+}
+
 .modal-header h3 {
-  color: #2d3748;
+  color: #ffffff;
   margin: 0;
   font-size: 1.3rem;
 }

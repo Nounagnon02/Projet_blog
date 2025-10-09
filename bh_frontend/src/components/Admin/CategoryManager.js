@@ -154,7 +154,7 @@ const handleDeleteCategory = async (id) => {
   return (
     <div className="category-manager">
       <div className="category-header">
-        <h3>📂 Catégories</h3>
+        <h3 className='PremierH3'>📂 Catégories</h3>
         <button 
           onClick={() => setShowAddForm(!showAddForm)} 
           className="toggle-add-btn"

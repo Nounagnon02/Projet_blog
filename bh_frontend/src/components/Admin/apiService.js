@@ -1,21 +1,22 @@
 import axios from 'axios';
 
-// Configuration de base axios
+// Configuration de base d'axios
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
+// Instance axios configurée
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
-    'Accept': 'application/json',
+    'Accept': 'application/json'
   },
   withCredentials: true
 });
 
-// Intercepteur pour ajouter le token d'authentification
+// Intercepteur pour ajouter le token automatiquement
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('auth_token');
+    const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -26,22 +27,22 @@ apiClient.interceptors.request.use(
   }
 );
 
-// Intercepteur pour gérer les erreurs globales
+// Intercepteur pour gérer les erreurs
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Redirection vers login si non authentifié
-      localStorage.removeItem('auth_token');
+      // Token expiré ou invalide
+      localStorage.removeItem('token');
       window.location.href = '/login';
     }
     return Promise.reject(error);
   }
 );
 
-//ABOUT PAGE
+// ==================== API ABOUT PAGE ====================
 export const aboutPageAPI = {
-  // Récupérer les données de la page About
+  // Récupérer les données (public)
   get: async () => {
     try {
       const response = await apiClient.get('/pages/about');
@@ -52,7 +53,7 @@ export const aboutPageAPI = {
     }
   },
 
-  // Mettre à jour la page About
+  // Mettre à jour (admin)
   update: async (data) => {
     try {
       const response = await apiClient.put('/admin/about', data);
@@ -63,10 +64,22 @@ export const aboutPageAPI = {
     }
   }
 };
+export const emailPageAPI = {
+   // Créer un envoi de mail 
+  create: async (data) => {
+    try {
+      const response = await apiClient.post('/email/store', data);
+      return response.data;
+    } catch (error) {
+      console.error('Erreur lors de la création de l\'envoie de mail:', error);
+      throw error;
+    }
+  },
+};
 
-//CONTACT PAGE
+// ==================== API CONTACT PAGE ====================
 export const contactPageAPI = {
-  // Récupérer les données de la page Contact
+  // Récupérer les données (public)
   get: async () => {
     try {
       const response = await apiClient.get('/pages/contact');
@@ -77,7 +90,7 @@ export const contactPageAPI = {
     }
   },
 
-  // Mettre à jour la page Contact
+  // Mettre à jour (admin)
   update: async (data) => {
     try {
       const response = await apiClient.put('/admin/contact', data);
@@ -89,9 +102,9 @@ export const contactPageAPI = {
   }
 };
 
-//PRIVACY PAGE
+// ==================== API PRIVACY PAGE ====================
 export const privacyPageAPI = {
-  // Récupérer les données de la page Privacy
+  // Récupérer les données (public)
   get: async () => {
     try {
       const response = await apiClient.get('/pages/privacy');
@@ -102,7 +115,7 @@ export const privacyPageAPI = {
     }
   },
 
-  // Mettre à jour la page Privacy
+  // Mettre à jour (admin)
   update: async (data) => {
     try {
       const response = await apiClient.put('/admin/privacy', data);
@@ -114,9 +127,9 @@ export const privacyPageAPI = {
   }
 };
 
-//ANNOUNCEMENTS
+// ==================== API ANNOUNCEMENTS ====================
 export const announcementsAPI = {
-  // Récupérer toutes les annonces
+  // Récupérer toutes les annonces (admin)
   getAll: async () => {
     try {
       const response = await apiClient.get('/admin/announcements');
@@ -127,10 +140,10 @@ export const announcementsAPI = {
     }
   },
 
-  // Récupérer uniquement les annonces actives
+  // Récupérer les annonces actives (public)
   getActive: async () => {
     try {
-      const response = await apiClient.get('/pages/announcements/active');
+      const response = await apiClient.get('/announcements/active');
       return response.data;
     } catch (error) {
       console.error('Erreur lors de la récupération des annonces actives:', error);
@@ -138,7 +151,7 @@ export const announcementsAPI = {
     }
   },
 
-  // Créer une nouvelle annonce
+  // Créer une annonce (admin)
   create: async (data) => {
     try {
       const response = await apiClient.post('/admin/announcements', data);
@@ -149,7 +162,7 @@ export const announcementsAPI = {
     }
   },
 
-  // Mettre à jour une annonce
+  // Mettre à jour une annonce (admin)
   update: async (id, data) => {
     try {
       const response = await apiClient.put(`/admin/announcements/${id}`, data);
@@ -160,7 +173,7 @@ export const announcementsAPI = {
     }
   },
 
-  // Basculer le statut actif/inactif
+  // Basculer le statut actif/inactif (admin)
   toggleActive: async (id) => {
     try {
       const response = await apiClient.patch(`/admin/announcements/${id}/toggle`);
@@ -171,7 +184,7 @@ export const announcementsAPI = {
     }
   },
 
-  // Supprimer une annonce
+  // Supprimer une annonce (admin)
   delete: async (id) => {
     try {
       const response = await apiClient.delete(`/admin/announcements/${id}`);
@@ -182,20 +195,25 @@ export const announcementsAPI = {
     }
   },
 
-  // Mettre à jour l'ordre des annonces
-  updateOrder: async (announcements) => {
+  // Réorganiser les annonces (admin)
+  reorder: async (announcements) => {
     try {
       const response = await apiClient.post('/admin/announcements/reorder', {
         announcements
       });
       return response.data;
     } catch (error) {
-      console.error('Erreur lors de la mise à jour de l\'ordre:', error);
+      console.error('Erreur lors de la réorganisation:', error);
       throw error;
     }
   }
+
+
+
+ 
 };
 
+// Export par défaut
 export default {
   aboutPageAPI,
   contactPageAPI,
