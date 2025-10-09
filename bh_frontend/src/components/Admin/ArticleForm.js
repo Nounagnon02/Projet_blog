@@ -6,7 +6,8 @@ import './ArticleForm.css';
 const ArticleForm = () => {
   const [formData, setFormData] = useState({
     title: '',
-    content: '',
+    content1: '',
+    content2: '',
     short_description: '',
     image1: '',
     image2: '',
@@ -30,7 +31,8 @@ const handleSubmit = async (e) => {
     
     const submitData = new FormData();
     submitData.append('title', formData.title);
-    submitData.append('content', formData.content);
+    submitData.append('content1', formData.content1);
+    submitData.append('content2', formData.content2);
     submitData.append('short_description', formData.short_description);
     submitData.append('category_id', formData.category_id);
     submitData.append('author_id', 1);
@@ -55,11 +57,7 @@ const handleSubmit = async (e) => {
     }
 
     try {
-      const result = await api.post('/articles/storage', submitData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const result = await api.post('/articles/storage', submitData);
       
       console.log('Response:', result.data);
       
@@ -72,7 +70,8 @@ const handleSubmit = async (e) => {
         
         setFormData({ 
             title: '',
-            content: '',
+            content1: '',
+            content2: '',
             short_description: '',
             category_id: '',
         });
@@ -118,25 +117,123 @@ const handleSubmit = async (e) => {
     });
   };
 
-  const handleImageChange1 = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage1(file);
+// Ajoutez cette fonction utilitaire dans votre ArticleForm.js
+
+const compressImage = (file, maxSizeMB = 2) => {
+  return new Promise((resolve, reject) => {
+    const maxSize = maxSizeMB * 1024 * 1024; // Convert to bytes
+    
+    // Si l'image est déjà assez petite, la retourner telle quelle
+    if (file.size <= maxSize) {
+      resolve(file);
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+        
+        // Calculer les nouvelles dimensions tout en gardant le ratio
+        const maxDimension = 1920;
+        if (width > height && width > maxDimension) {
+          height = (height * maxDimension) / width;
+          width = maxDimension;
+        } else if (height > maxDimension) {
+          width = (width * maxDimension) / height;
+          height = maxDimension;
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        // Commencer avec une qualité de 0.8
+        let quality = 0.8;
+        
+        canvas.toBlob(
+          (blob) => {
+            if (blob.size > maxSize && quality > 0.1) {
+              // Si toujours trop grand, réessayer avec une qualité moindre
+              quality -= 0.1;
+              canvas.toBlob(
+                (newBlob) => {
+                  const compressedFile = new File([newBlob], file.name, {
+                    type: 'image/jpeg',
+                    lastModified: Date.now(),
+                  });
+                  resolve(compressedFile);
+                },
+                'image/jpeg',
+                quality
+              );
+            } else {
+              const compressedFile = new File([blob], file.name, {
+                type: 'image/jpeg',
+                lastModified: Date.now(),
+              });
+              resolve(compressedFile);
+            }
+          },
+          'image/jpeg',
+          quality
+        );
+      };
+      
+      img.onerror = reject;
+    };
+    
+    reader.onerror = reject;
+  });
+};
+
+// Modifiez vos gestionnaires d'images existants :
+
+const handleImageChange1 = async (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    try {
+      // Compresser l'image avant de la stocker
+      const compressedFile = await compressImage(file, 2); // 2MB max
+      console.log(`Image compressée: ${(file.size / 1024 / 1024).toFixed(2)}MB → ${(compressedFile.size / 1024 / 1024).toFixed(2)}MB`);
+      
+      setImage1(compressedFile);
       const reader = new FileReader();
       reader.onloadend = () => setImagePreview1(reader.result);
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(compressedFile);
+    } catch (error) {
+      console.error('Erreur lors de la compression:', error);
+      alert('Erreur lors du traitement de l\'image');
     }
-  };
+  }
+};
 
-  const handleImageChange2 = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage2(file);
+const handleImageChange2 = async (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    try {
+      const compressedFile = await compressImage(file, 2); // 2MB max
+      console.log(`Image compressée: ${(file.size / 1024 / 1024).toFixed(2)}MB → ${(compressedFile.size / 1024 / 1024).toFixed(2)}MB`);
+      
+      setImage2(compressedFile);
       const reader = new FileReader();
       reader.onloadend = () => setImagePreview2(reader.result);
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(compressedFile);
+    } catch (error) {
+      console.error('Erreur lors de la compression:', error);
+      alert('Erreur lors du traitement de l\'image');
     }
-  };
+  }
+};
 
   const removeImage1 = () => {
     setImage1(null);
@@ -183,10 +280,10 @@ const handleSubmit = async (e) => {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Contenu</label>
+            <label className="form-label">Contenu Au dessus de la première image</label>
             <textarea
-              name="content"
-              value={formData.content}
+              name="content1"
+              value={formData.content1}
               onChange={handleChange}
               className="form-textarea"
               placeholder="Votre histoire commence ici..."
@@ -242,6 +339,20 @@ const handleSubmit = async (e) => {
             )}
           </div>
 
+
+          <div className="form-group">
+            <label className="form-label">Contenu Au dessus de la seconde image</label>
+            <textarea
+              name="content2"
+              value={formData.content2}
+              onChange={handleChange}
+              className="form-textarea"
+              placeholder="Votre histoire commence ici..."
+              rows="4"
+              required
+            />
+          </div>
+
           <div className="form-group">
             <label className="form-label">Image2</label>
             {imagePreview2 ? (
@@ -279,7 +390,7 @@ const handleSubmit = async (e) => {
                 Publication...
               </>
             ) : (
-              '🚀 Publier l\'histoire'
+              'Publier l\'histoire'
             )}
           </button>
         </form>

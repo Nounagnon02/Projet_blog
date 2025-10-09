@@ -22,7 +22,6 @@ const AboutEditor = ({ onClose }) => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
 
-  // Charger les données au montage du composant
   useEffect(() => {
     loadAboutData();
   }, []);
@@ -34,7 +33,6 @@ const AboutEditor = ({ onClose }) => {
       const response = await aboutPageAPI.get();
       
       if (response.success && response.data) {
-        // Mapper les données de la DB vers le format du composant
         setAboutData({
           heroTitle: response.data.hero_title || "",
           heroSubtitle: response.data.hero_subtitle || "",
@@ -65,7 +63,7 @@ const AboutEditor = ({ onClose }) => {
       const response = await aboutPageAPI.update(aboutData);
       
       if (response.success) {
-        alert('✅ Modifications sauvegardées avec succès !');
+        alert('Modifications sauvegardées avec succès !');
         if (onClose) onClose();
       } else {
         throw new Error(response.message || 'Erreur lors de la sauvegarde');
@@ -77,18 +75,18 @@ const AboutEditor = ({ onClose }) => {
         const errors = Object.values(err.response.data.errors).flat();
         setError(errors.join('\n'));
       } else {
-        setError('❌ Erreur lors de la sauvegarde. Veuillez réessayer.');
+        setError('Erreur lors de la sauvegarde. Veuillez réessayer.');
       }
       
-      alert(error || '❌ Erreur lors de la sauvegarde');
+      alert(error || 'Erreur lors de la sauvegarde');
     } finally {
       setSaving(false);
     }
   };
 
-  const handleReset = async () => {
+  const handleReset = () => {
     if (window.confirm('Voulez-vous vraiment recharger les données depuis la base de données ?')) {
-      await loadAboutData();
+      loadAboutData();
     }
   };
 
@@ -324,6 +322,7 @@ const AboutEditor = ({ onClose }) => {
           <div className="section-header">
             <h3>
               {sections.find(s => s.id === activeSection)?.icon}
+              {' '}
               {sections.find(s => s.id === activeSection)?.name}
             </h3>
           </div>
@@ -339,6 +338,10 @@ const AboutEditor = ({ onClose }) => {
             >
               <span className="btn-icon">💾</span>
               {saving ? 'Sauvegarde...' : 'Sauvegarder les modifications'}
+            </button>
+            <button className="preview-btn">
+              <span className="btn-icon">👁️</span>
+              Aperçu
             </button>
             <button 
               className="reset-btn" 

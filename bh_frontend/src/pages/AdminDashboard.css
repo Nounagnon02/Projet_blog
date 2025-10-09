@@ -19,7 +19,7 @@
 }
 
 .admin-dashboard-header div h1 {
-  color: white;
+  color: rgb(0, 0, 0);
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
@@ -27,15 +27,15 @@
 }
 
 .admin-dashboard-header div p {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(0, 0, 0, 0.8);
   font-size: 1.1rem;
 }
 
 /* Bouton déconnexion en haut à droite */
 .admin-logout-button {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgb(255, 0, 0);
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgb(255, 0, 0);
   padding: 0.75rem 1.5rem;
   border-radius: 10px;
   font-weight: 600;
@@ -46,14 +46,14 @@
 }
 
 .admin-logout-button:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 0, 0, 0.25);
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 15px rgba(191, 15, 15, 0.2);
 }
 
 /* Contenu principal simple */
 .admin-content {
-  background: rgba(255, 255, 255, 0.95);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
   border-radius: 15px;
   padding: 2rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -90,7 +90,7 @@
   border: none;
   padding: 1rem 2rem;
   border-radius: 10px;
-  color: white;
+  color: rgb(0, 0, 0);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;

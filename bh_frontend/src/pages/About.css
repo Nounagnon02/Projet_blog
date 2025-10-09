@@ -1,7 +1,7 @@
 /* ===== PAGE À PROPOS MAGNIFIQUE ===== */
 .about-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
 }
 
 /* Hero Section */
@@ -205,7 +205,7 @@
 /* Team Section */
 .team-section {
   padding: 5rem 2rem;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
   color: white;
 }
 
@@ -306,7 +306,7 @@
 }
 
 .cta-btn.primary {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, #18224e, #764ba2);
   color: white;
   box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
 }
@@ -326,7 +326,7 @@
 .cta-btn.secondary:hover {
   transform: translateY(-3px);
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
-  background: #667eea;
+  background: #141e4a;
   color: white;
 }
 

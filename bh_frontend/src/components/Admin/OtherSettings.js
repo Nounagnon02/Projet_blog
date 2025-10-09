@@ -18,7 +18,7 @@ const OtherSettings = () => {
 
   return (
     <div className="other-settings">
-      <h3>⚙️ Autres modifications</h3>
+      <h3 className='PremierH3'>⚙️ Autres modifications</h3>
       <p className="settings-description">
         Gestion des pages importantes du site
       </p>
