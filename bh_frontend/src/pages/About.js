@@ -1,16 +1,68 @@
 
 import { Link } from 'react-router-dom';
 import './About.css';
+import { aboutPageAPI } from '../components/Admin/apiService';
+import React, {useState, useEffect} from 'react';
 
 const About = () => {
+  const [aboutData, setAboutData] = useState({
+        heroTitle: "",
+        heroSubtitle: "",
+        missionTitle: "",
+        missionSubtitle: "",
+        missionInspire: "",
+        missionConnect: "",
+        missionInnovate: "",
+        teamTitle: "",
+        teamSubtitle: "",
+        ctaTitle: "",
+        ctaSubtitle: ""
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+      loadAboutData();
+    }, []);
+      
+    const loadAboutData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await aboutPageAPI.get();
+            
+        if (response.success && response.data) {
+              setAboutData({
+                heroTitle: response.data.hero_title || "",
+                heroSubtitle: response.data.hero_subtitle || "",
+                missionTitle: response.data.mission_title || "",
+                missionSubtitle: response.data.mission_subtitle || "",
+                missionInspire: response.data.mission_inspire || "",
+                missionConnect: response.data.mission_connect || "",
+                missionInnovate: response.data.mission_innovate || "",
+                teamTitle: response.data.team_title || "",
+                teamSubtitle: response.data.team_subtitle || "",
+                ctaTitle: response.data.cta_title || "",
+                ctaSubtitle: response.data.cta_subtitle || ""
+              });
+            }
+          } catch (err) {
+            console.error('Erreur lors du chargement:', err);
+            setError('Impossible de charger les données. Veuillez réessayer.');
+          } finally {
+            setLoading(false);
+          }
+        };
+  
+
   return (
     <div className="about-page">
       {/* Hero Section */}
       <section className="about-hero">
         <div className="hero-content">
-          <h1>👋 Bienvenue sur StoryHub</h1>
+          <h1>{aboutData.heroTitle}</h1>
           <p className="hero-subtitle">
-            Votre plateforme de partage d'histoires captivantes
+            {aboutData.heroSubtitle}
           </p>
           <div className="hero-stats">
             <div className="stat">
@@ -33,24 +85,24 @@ const About = () => {
       <section className="mission-section">
         <div className="container">
           <div className="section-header">
-            <h2>🎯 Notre Mission</h2>
-            <p>Donner vie aux récits qui méritent d'être partagés</p>
+            <h2>{aboutData.missionTitle}</h2>
+            <p>{aboutData.missionSubtitle}</p>
           </div>
           <div className="mission-grid">
             <div className="mission-card">
               <div className="card-icon">🌟</div>
               <h3>Inspirer</h3>
-              <p>Créer un espace où chaque voix peut s'exprimer et inspirer des milliers de lecteurs</p>
+              <p>{aboutData.missionInspire}</p>
             </div>
             <div className="mission-card">
               <div className="card-icon">🤝</div>
               <h3>Connecter</h3>
-              <p>Rassembler une communauté passionnée d'auteurs et de lecteurs du monde entier</p>
+              <p>{aboutData.missionConnect}</p>
             </div>
             <div className="mission-card">
               <div className="card-icon">🚀</div>
               <h3>Innovation</h3>
-              <p>Révolutionner la façon dont les histoires sont découvertes et partagées</p>
+              <p>{aboutData.missionInnovate}</p>
             </div>
           </div>
         </div>
@@ -60,8 +112,8 @@ const About = () => {
       <section className="team-section">
         <div className="container">
           <div className="section-header">
-            <h2>👥 Notre Équipe</h2>
-            <p>Des passionnés dévoués à votre expérience de lecture</p>
+            <h2>{aboutData.teamTitle}</h2>
+            <p>{aboutData.teamSubtitle}</p>
           </div>
           <div className="team-grid">
             <div className="team-member">
@@ -89,8 +141,8 @@ const About = () => {
       {/* CTA */}
       <section className="about-cta">
         <div className="container">
-          <h2>📖 Prêt à commencer votre aventure ?</h2>
-          <p>Rejoignez notre communauté et découvrez des histoires extraordinaires</p>
+          <h2>{aboutData.ctaTitle}</h2>
+          <p>{aboutData.ctaSubtitle}</p>
           <div className="cta-buttons">
             <Link to="/" className="cta-btn primary">
               Explorer les histoires

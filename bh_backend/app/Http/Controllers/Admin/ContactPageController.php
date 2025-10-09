@@ -48,6 +48,12 @@ class ContactPageController extends Controller
         ]);
     }
 
+    //Recuperer les données
+
+    public function  index (){
+        return ContactPage::all();
+    }
+
     /**
      * Mettre à jour la page Contact
      */

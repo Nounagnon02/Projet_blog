@@ -77,6 +77,10 @@ export const emailPageAPI = {
   },
 };
 
+//Contact
+
+
+
 // ==================== API CONTACT PAGE ====================
 export const contactPageAPI = {
   // Récupérer les données (public)

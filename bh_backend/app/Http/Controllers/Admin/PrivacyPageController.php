@@ -178,4 +178,8 @@ class PrivacyPageController extends Controller
             'data' => $privacyPage
         ]);
     }
+
+    public function index(){
+        return PrivacyPage::all();
+    }
 }
