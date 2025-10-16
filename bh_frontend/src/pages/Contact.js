@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import './Contact.css';
 import Api from '../services/Api';
 import { contactPageAPI } from '../components/Admin/apiService';
+import { useAnalytics } from '../hooks/useAnalytics'; 
 
 const Contact = () => {
+  useAnalytics(); // Hook pour le tracking des pages vues
   const [formData, setFormData] = useState({
     name: '',
     email: '',

@@ -1,9 +1,11 @@
 import React ,{useState, useEffect} from 'react';
 import './Privacy.css';
 import { privacyPageAPI } from '../components/Admin/apiService';
+import { useAnalytics } from '../hooks/useAnalytics';
 
 
 const Privacy = () => {
+  useAnalytics(); // Hook pour le tracking des pages vues 
 
     const [privacyData, setPrivacyData] = useState({
         	

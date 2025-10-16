@@ -9,6 +9,11 @@ use App\Http\Controllers\Admin\AboutPageController;
 use App\Http\Controllers\Admin\ContactPageController;
 use App\Http\Controllers\Admin\PrivacyPageController;
 use App\Http\Controllers\Admin\AnnouncementController;
+use App\Http\Controllers\Admin\MessageController;
+use App\Http\Controllers\Admin\StatisticsController;
+use App\Http\Controllers\RecommendationController;
+use App\Http\Controllers\TranslationController;
+use App\Http\Controllers\PageViewController;
 use App\Http\Controllers\EmailsController;
 
 /*
@@ -87,4 +92,44 @@ Route::prefix('admin')->group(function () {
         Route::delete('/{id}', [AnnouncementController::class, 'destroy']);
         Route::post('/reorder', [AnnouncementController::class, 'updateOrder']);
     });
+
+    // Gestion des messages
+    Route::prefix('messages')->group(function () {
+        Route::get('/', [MessageController::class, 'index']);
+        Route::get('/stats', [MessageController::class, 'getStats']);
+        Route::get('/{id}', [MessageController::class, 'show']);
+        Route::post('/{id}/reply', [MessageController::class, 'reply']);
+        Route::patch('/{id}/read', [MessageController::class, 'markAsRead']);
+        Route::delete('/{id}', [MessageController::class, 'destroy']);
+    });
+
+    // Statistiques
+    Route::prefix('statistics')->group(function () {
+        Route::get('/dashboard', [StatisticsController::class, 'getDashboard']);
+        Route::get('/page-views', [StatisticsController::class, 'getPageViews']);
+        Route::get('/top-articles', [StatisticsController::class, 'getTopArticles']);
+        Route::get('/devices', [StatisticsController::class, 'getDeviceStats']);
+        Route::get('/browsers', [StatisticsController::class, 'getBrowserStats']);
+        Route::get('/os', [StatisticsController::class, 'getOsStats']);
+        Route::get('/countries', [StatisticsController::class, 'getCountryStats']);
+    });
+
+    // Traductions
+    Route::prefix('articles/{articleId}/translations')->group(function () {
+        Route::post('/', [TranslationController::class, 'store']);
+        Route::get('/languages', [TranslationController::class, 'getAvailableLanguages']);
+        Route::get('/{language}', [TranslationController::class, 'getTranslation']);
+    });
 });
+
+// Routes publiques pour recommandations
+Route::prefix('recommendations')->group(function () {
+    Route::get('/article/{articleId}', [RecommendationController::class, 'getRecommendations']);
+    Route::get('/trending', [RecommendationController::class, 'getTrending']);
+});
+
+// Routes publiques pour traductions
+Route::get('/articles/{articleId}/translations/{language}', [TranslationController::class, 'getTranslation']);
+
+// Route pour tracker les vues
+Route::post('/track-view', [PageViewController::class, 'track']);

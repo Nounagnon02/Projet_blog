@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import './About.css';
 import { aboutPageAPI } from '../components/Admin/apiService';
 import React, {useState, useEffect} from 'react';
+import { useAnalytics } from '../hooks/useAnalytics';
 
 const About = () => {
+  useAnalytics(); // Hook pour le tracking des pages vues
   const [aboutData, setAboutData] = useState({
         heroTitle: "",
         heroSubtitle: "",

@@ -217,3 +217,29 @@
   flex: 1;
   margin: 0;
 }
+
+/* Style spécifique pour l'onglet Messages si besoin */
+.tab-button:nth-child(3) { /* Le 3ème onglet (Messages) */
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.tab-button:nth-child(3):hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.tab-button:nth-child(3).active {
+  background: rgba(74, 144, 226, 0.3); /* Bleu pour Messages */
+}
+
+/* Style spécifique pour l'onglet Messages si besoin */
+.tab-button:nth-child(3) { /* Le 3ème onglet (Messages) */
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.tab-button:nth-child(3):hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.tab-button:nth-child(3).active {
+  background: rgba(74, 144, 226, 0.3); /* Bleu pour Messages */
+}

@@ -40,4 +40,14 @@ class Article extends Model
     {
         return $this->hasMany(Commentaire::class);
     }
- }
+
+    public function translations()
+    {
+        return $this->hasMany(ArticleTranslation::class);
+    }
+
+    public function pageViews()
+    {
+        return $this->hasMany(PageView::class);
+    }
+}

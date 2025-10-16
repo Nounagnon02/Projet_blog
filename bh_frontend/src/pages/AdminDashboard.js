@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ArticleForm from '../components/Admin/ArticleForm';
 import CategoryManager from '../components/Admin/CategoryManager';
-import OtherSettings from '../components/Admin/OtherSettings'; // N'oublie pas d'importer le nouveau composant
+import MessageManager from '../components/Admin/MessageManager';  
+import StatisticsManager from '../components/Admin/StatisticsManager';  
+import OtherSettings from '../components/Admin/OtherSettings'; 
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('articles'); // 'articles', 'categories' ou 'autres'
+  const [activeTab, setActiveTab] = useState('articles'); // 'articles', 'categories', 'autres'
 
   const isAuthenticated = sessionStorage.getItem('adminAuthenticated') === 'true';
   
@@ -48,6 +50,21 @@ const AdminDashboard = () => {
           >
             📂 Catégories
           </button>
+
+            <button 
+            className={`tab-button ${activeTab === 'messages' ? 'active' : ''}`}
+            onClick={() => setActiveTab('messages')}
+          >
+            📨 Messages
+          </button>
+
+          <button 
+            className={`tab-button ${activeTab === 'statistics' ? 'active' : ''}`}
+            onClick={() => setActiveTab('statistics')}
+          >
+            📊 Statistiques
+          </button>
+
           <button 
             className={`tab-button ${activeTab === 'autres' ? 'active' : ''}`}
             onClick={() => setActiveTab('autres')}
@@ -62,7 +79,11 @@ const AdminDashboard = () => {
             <ArticleForm />
           ) : activeTab === 'categories' ? (
             <CategoryManager />
-          ) : (
+          ) : activeTab === 'messages' ? (
+            <MessageManager />
+          ): activeTab === 'statistics' ? (
+            <StatisticsManager />
+          ): (
             <OtherSettings />
           )}
         </div>
