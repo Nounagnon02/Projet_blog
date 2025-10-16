@@ -1,0 +1,16 @@
+# Node modules
+node_modules/
+**/node_modules/
+
+# Cache files
+.cache/
+**/.cache/
+
+# Build files
+dist/
+build/
+
+# Environment files
+.env
+.env.local
+.env.*.local

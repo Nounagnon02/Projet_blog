@@ -1,0 +1,154 @@
+.announcements-banner {
+  position: relative; /* Change de fixed à relative */
+  z-index: 1000;
+  width: 100%;
+}
+
+.announcement-item {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* SUPPRIME l'animation slideDown qui déplace tout */
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Garde seulement les styles des annonces */
+.announcement-item.info {
+  background: linear-gradient(135deg, #90cdf4, #4299e1);
+  color: white;
+  border-left: 6px solid #2b6cb0;
+}
+
+.announcement-item.promotion {
+  background: linear-gradient(135deg, #9ae6b4, #48bb78);
+  color: white;
+  border-left: 6px solid #2f855a;
+}
+
+.announcement-item.event {
+  background: linear-gradient(135deg, #fbd38d, #ed8936);
+  color: white;
+  border-left: 6px solid #c05621;
+}
+
+.announcement-item.warning {
+  background: linear-gradient(135deg, #fc8181, #e53e3e);
+  color: white;
+  border-left: 6px solid #c53030;
+}
+
+.announcement-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.announcement-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.announcement-text {
+  flex: 1;
+}
+
+.announcement-title {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.announcement-description {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+  line-height: 1.4;
+}
+
+.announcement-nav {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.nav-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.nav-dot.active {
+  background: rgba(255, 255, 255, 0.9);
+  transform: scale(1.2);
+}
+
+.nav-dot:hover {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.close-announcement {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.close-announcement:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .announcement-item {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+  }
+  
+  .announcement-content {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .announcement-title {
+    font-size: 1rem;
+  }
+  
+  .announcement-description {
+    font-size: 0.85rem;
+  }
+}

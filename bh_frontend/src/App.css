@@ -1,0 +1,156 @@
+/* =============================================================
+   VARIABLES ET FONDATIONS
+   ============================================================= */
+
+:root {
+  /* Couleurs primaires */
+  --color-primary: #8b4513; /* Marron Parchemin/Terre */
+  --color-secondary: #ffc400; /* Or Vif / Akcent */
+  --color-accent: #a0522d; /* Terre Cuit / Sienne */
+  --color-text-main: #2c2c2c; /* Noir Profond pour le texte */
+  --color-text-light: #5a5a5a; /* Gris foncé pour le texte secondaire */
+  --color-background-main: #fcf9f3; /* Blanc cassé / Parchemin clair */
+  --color-background-dark: #222222; /* Fond pour les sections sombres (e.g., Footer) */
+  --color-shadow: rgba(0, 0, 0, 0.1);
+
+  /* Polices */
+  --font-title: 'Georgia', serif; /* Classique pour les titres */
+  --font-body: 'Arial', sans-serif; /* Lisible pour le corps */
+  --font-mythic: 'Times New Roman', serif; /* Pour un style mythique */
+
+  /* Espacements */
+  --spacing-md: 20px;
+  --spacing-lg: 40px;
+}
+
+/* Réinitialisation de base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-text-main);
+  background-color: var(--color-background-main);
+  line-height: 1.6;
+}
+
+/* Liens globaux */
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+a:hover {
+  color: var(--color-secondary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-title);
+  color: var(--color-primary);
+  margin-bottom: 0.5em;
+  line-height: 1.1;
+}
+
+/* =============================================================
+   STRUCTURE DE L'APPLICATION
+   ============================================================= */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  /* Laisser de l'espace pour le header fixe si besoin */
+}
+
+.main-content {
+  flex-grow: 1; /* Assure que le contenu principal prend l'espace restant */
+  padding-top: 80px; /* Espace pour un Header standard non-fixé ou scrollé */
+  max-width: 1200px;
+  width: 90%;
+  margin: 0 auto;
+  padding-bottom: var(--spacing-lg);
+}
+
+/* =============================================================
+   COMPOSANT ANNONCEMENTS (Haut de page)
+   ============================================================= */
+.announcements {
+    background-color: var(--color-secondary);
+    color: var(--color-background-dark);
+    text-align: center;
+    padding: 8px 0;
+    font-size: 0.9rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    position: fixed;
+    width: 100%;
+    z-index: 1001; /* Au-dessus du header */
+    top: 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Ajuster le padding de main-content si Announcements est utilisé */
+.app-content > .announcements + .header + .main-content {
+    padding-top: 110px; /* 30px (Announce) + 80px (Header) */
+}
+
+
+/* =============================================================
+   UTILITIES / EFFETS
+   ============================================================= */
+
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: var(--color-primary);
+  color: #fff;
+  border-radius: 5px;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: var(--color-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px var(--color-shadow);
+}
+
+/* Style de chargement */
+.loading-container {
+    text-align: center;
+    padding: var(--spacing-lg);
+    font-size: 1.2rem;
+    color: var(--color-primary);
+}
+
+.spinner {
+    border: 5px solid rgba(139, 69, 19, 0.1);
+    border-top: 5px solid var(--color-secondary);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

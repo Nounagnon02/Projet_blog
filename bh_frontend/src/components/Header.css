@@ -1,0 +1,359 @@
+/* ==========================================
+   HEADER - DESIGN ÉPURÉ ET PROFESSIONNEL
+   ========================================== */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(17, 24, 39, 0.95);
+  backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.header.scrolled {
+  background: rgba(17, 24, 39, 0.98);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+.header.hovered {
+  box-shadow: 0 2px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Navbar */
+.navbar {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.2rem 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: padding 0.3s ease;
+}
+
+.header.scrolled .navbar {
+  padding: 0.9rem 2.5rem;
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f9fafb;
+  transition: all 0.3s ease;
+  letter-spacing: -0.02em;
+}
+
+.logo-icon {
+  font-size: 1.75rem;
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  filter: brightness(0) invert(1);
+}
+
+.logo:hover {
+  color: #fbbf24;
+}
+
+.logo:hover .logo-icon {
+  transform: scale(1.1) rotate(-5deg);
+  filter: brightness(1) invert(0);
+}
+
+/* Navigation Links */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: #d1d5db;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.625rem 1rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: #f9fafb;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-link.active {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.15);
+}
+
+.link-icon {
+  font-size: 1.1rem;
+  transition: transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+
+.nav-link:hover .link-icon {
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+.nav-link.active .link-icon {
+  filter: brightness(1) invert(0);
+  opacity: 1;
+}
+
+/* Indicateur actif sous le lien */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 80%;
+  height: 2px;
+  background: #fbbf24;
+  transition: transform 0.3s ease;
+  border-radius: 2px;
+}
+
+.nav-link:hover::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+.nav-link.active::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+/* Animation subtile de vague (optionnelle) */
+.nav-wave {
+  display: none; /* Désactivé pour un look plus épuré */
+}
+
+/* Lueur au survol du header */
+.header-glow {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent,
+    rgba(217, 119, 6, 0.3) 50%,
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.header.hovered .header-glow {
+  opacity: 1;
+}
+
+/* Menu mobile (hamburger) */
+.mobile-menu-button {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: #f9fafb;
+  transition: all 0.2s ease;
+}
+
+.mobile-menu-button:hover {
+  color: #fbbf24;
+  transform: scale(1.05);
+}
+
+.mobile-menu-button svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  stroke: currentColor;
+}
+
+/* Navigation mobile */
+.nav-links.mobile-open {
+  display: flex;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .navbar {
+    padding: 1rem 2rem;
+  }
+
+  .nav-links {
+    gap: 0.25rem;
+  }
+
+  .nav-link {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 1rem 1.5rem;
+  }
+
+  .mobile-menu-button {
+    display: block;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    background: rgba(17, 24, 39, 0.98);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    padding: 1rem 0;
+    display: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .nav-links.mobile-open {
+    display: flex;
+    animation: slideDown 0.3s ease;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .nav-link {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border-radius: 0;
+    font-size: 1rem;
+    justify-content: flex-start;
+  }
+
+  .nav-link::after {
+    display: none;
+  }
+
+  .nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .nav-link.active {
+    background: rgba(251, 191, 36, 0.15);
+    border-left: 3px solid #fbbf24;
+  }
+
+  .logo {
+    font-size: 1.35rem;
+  }
+
+  .logo-icon {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0.875rem 1rem;
+  }
+
+  .logo {
+    font-size: 1.25rem;
+  }
+
+  .logo-icon {
+    font-size: 1.35rem;
+  }
+
+  .nav-link {
+    padding: 0.875rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  .link-icon {
+    font-size: 1rem;
+  }
+}
+
+/* States alternatifs pour thème sombre (optionnel) */
+/* Le thème sombre est maintenant le thème par défaut */
+
+/* Focus visible pour accessibilité */
+.logo:focus-visible,
+.nav-link:focus-visible,
+.mobile-menu-button:focus-visible {
+  outline: 2px solid #fbbf24;
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* Animation d'entrée au chargement */
+.header {
+  animation: slideInDown 0.5s ease-out;
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Amélioration de la lisibilité */
+.logo,
+.nav-link {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Performance */
+.header,
+.navbar,
+.logo,
+.nav-link,
+.nav-link::after {
+  will-change: transform, opacity;
+}
+
+/* Transition douce pour le contenu sous le header */
+body {
+  padding-top: 70px;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-top: 60px;
+  }
+}
