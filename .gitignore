@@ -14,3 +14,4 @@ build/
 .env
 .env.local
 .env.*.local
+bh_frontend/node_modules/
