@@ -260,9 +260,9 @@ const ArticleList = () => {
               <span>Collection de Légendes</span>
             </div>
             
-            <h1 className="hero-title">
+            <span className="hero-title">
               Histoires <span className="hero-title-highlight">Légendaires</span>
-            </h1>
+            </span>
             
             <p className="hero-description">
               Explorez les mythes et récits épiques qui ont traversé les âges

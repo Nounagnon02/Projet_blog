@@ -4,8 +4,9 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-        'http://localhost:3000',
-        'http://localhost:8000'
+        env('FRONTEND_URL', 'http://localhost:3000'),
+        'https://your-app.vercel.app',
+        'https://*.vercel.app',
     ],
     'allowed_origins_patterns' => [],
     'allowed_headers' => ['*'],

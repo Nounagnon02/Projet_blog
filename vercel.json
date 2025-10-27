@@ -1,0 +1,16 @@
+{
+  "buildCommand": "cd bh_frontend && npm run build",
+  "outputDirectory": "bh_frontend/dist",
+  "devCommand": "cd bh_frontend && npm run dev",
+  "installCommand": "cd bh_frontend && npm install",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "env": {
+    "VITE_API_URL": "https://your-laravel-api.onrender.com"
+  }
+}

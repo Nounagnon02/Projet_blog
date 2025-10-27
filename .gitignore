@@ -15,3 +15,33 @@ build/
 .env.local
 .env.*.local
 bh_frontend/node_modules/
+
+# Backend (Laravel)
+bh_backend/vendor/
+bh_backend/.env
+bh_backend/.env.backup
+bh_backend/.phpunit.result.cache
+bh_backend/node_modules/
+bh_backend/public/hot
+bh_backend/public/storage
+bh_backend/storage/*.key
+bh_backend/bootstrap/cache/*
+
+# Frontend (React)
+bh_frontend/node_modules/
+bh_frontend/dist/
+bh_frontend/build/
+bh_frontend/.env
+bh_frontend/.env.local
+bh_frontend/.env.production
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
