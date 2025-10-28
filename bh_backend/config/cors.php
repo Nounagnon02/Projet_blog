@@ -7,6 +7,7 @@ return [
         env('FRONTEND_URL', 'http://localhost:3000'),
         'https://your-app.vercel.app',
         'https://*.vercel.app',
+        'http://localhost:3000',
     ],
     'allowed_origins_patterns' => [],
     'allowed_headers' => ['*'],

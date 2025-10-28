@@ -421,3 +421,43 @@
     justify-content: center;
   }
 }
+
+/* Exemple de code pour ajouter une police cohérente */
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+}
+
+p, span, button {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Exemple de code pour ajouter des tailles de police appropriées */
+h1 {
+  font-size: 24px;
+}
+
+h2 {
+  font-size: 20px;
+}
+
+p {
+  font-size: 16px;
+}
+
+/* Exemple de code pour ajouter des couleurs cohérentes */
+button {
+  background-color: #007bff;
+  color: #fff;
+}
+
+/* Exemple de code pour tester la lisibilité */
+@media (max-width: 1200px) {
+  body {
+    font-size: 16px;
+  }
+}
