@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://projet-blog-wg7g.onrender.com' || 'http://localhost:8000/api';
+const API_URL = 'https://projet-blog-wg7g.onrender.com/api' || 'http://localhost:8000/api';
 
 // Instance Axios pour les requêtes standard
 const api = axios.create({
