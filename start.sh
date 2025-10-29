@@ -6,6 +6,8 @@ php-fpm -D
 # Exécuter les migrations
 php artisan migrate --force
 
+php artisan db:seed
+
 # Optimiser l'application
 php artisan config:cache
 php artisan route:cache
