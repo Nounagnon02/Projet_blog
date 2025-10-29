@@ -5,7 +5,7 @@ return [
 
     'allowed_origins' => [
         env('FRONTEND_URL', 'http://localhost:3000'),
-        'https://legendes-oubliees.vercel.app/',
+        'https://legendes-oubliees.vercel.app',
         'http://localhost:3000',
     ],
     'allowed_origins_patterns' => [],
