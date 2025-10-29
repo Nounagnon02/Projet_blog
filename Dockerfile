@@ -21,8 +21,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Créer le répertoire de travail
 WORKDIR /var/www
 
-# Copier les fichiers de l'application
-COPY . .
+# Copier SEULEMENT le contenu de bh_backend (pas le dossier lui-même)
+COPY bh_backend/ .
 
 # Installer les dépendances PHP
 RUN composer install --no-dev --optimize-autoloader --no-interaction
