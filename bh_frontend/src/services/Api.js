@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000/api';
+const API_URL = 'https://legendes-oubliees.vercel.app/' || 'http://localhost:8000/api';
 
 // Instance Axios pour les requêtes standard
 const api = axios.create({

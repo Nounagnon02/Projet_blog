@@ -24,23 +24,23 @@ services:
         value: pgsql
       - key: DB_HOST
         fromDatabase:
-          name: laravel-db
+          name: histories_6eia
           property: host
       - key: DB_PORT
         fromDatabase:
-          name: laravel-db
+          name: histories_6eia
           property: port
       - key: DB_DATABASE
         fromDatabase:
-          name: laravel-db
+          name: histories_6eia
           property: database
       - key: DB_USERNAME
         fromDatabase:
-          name: laravel-db
+          name: histories_6eia
           property: user
       - key: DB_PASSWORD
         fromDatabase:
-          name: laravel-db
+          name: histories_6eia
           property: password
       - key: FRONTEND_URL
         sync: false
@@ -49,8 +49,3 @@ services:
       - key: QUEUE_CONNECTION
         value: sync
 
-databases:
-  - name: laravel-db
-    databaseName: laravel
-    user: laravel
-    plan: free
