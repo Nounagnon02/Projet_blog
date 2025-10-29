@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Configuration de base d'axios
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api' || 'https://projet-blog-wg7g.onrender.com';
 
 // Instance axios configurée
 const apiClient = axios.create({

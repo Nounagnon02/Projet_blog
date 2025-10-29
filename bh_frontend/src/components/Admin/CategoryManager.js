@@ -42,7 +42,7 @@ const CategoryManager = () => {
         
         // Envoyer seulement la nouvelle catégorie
         const response = await api.post(
-            'categories/store',
+            '/categories/store',
             { name: newCategory.trim() },
             {
                 headers: {
