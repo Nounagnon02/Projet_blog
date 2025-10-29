@@ -1,0 +1,35 @@
+# Dépendances
+/vendor
+/node_modules
+
+# Environnement
+.env
+.env.*
+!.env.example
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Tests
+/tests
+.phpunit.result.cache
+
+# Cache
+/bootstrap/cache/*
+/storage/*.key
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+*.md

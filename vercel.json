@@ -1,9 +1,9 @@
 {
   "buildCommand": "cd bh_frontend && npm run build",
-  "outputDirectory": "bh_frontend/dist",
+  "outputDirectory": "bh_frontend/build",
   "devCommand": "cd bh_frontend && npm run dev",
   "installCommand": "cd bh_frontend && npm install",
-  "framework": "vite",
+  "framework": "create-react-app",
   "rewrites": [
     {
       "source": "/(.*)",

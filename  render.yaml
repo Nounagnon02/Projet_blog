@@ -1,27 +1,25 @@
 services:
   - type: web
     name: laravel-api
-    env: php
-    rootDir: bh_backend
-    buildCommand: |
-      cd bh_backend
-      composer install --no-dev --optimize-autoloader
-      php artisan config:cache
-      php artisan route:cache
-      php artisan view:cache
-    startCommand: |
-      cd bh_backend
-      php artisan migrate --force
-      php artisan serve --host=0.0.0.0 --port=$PORT
+    env: docker
+    dockerfilePath: ./bh_backend/Dockerfile
+    dockerContext: ./bh_backend
+    plan: free
     envVars:
+      - key: APP_NAME
+        value: Laravel
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
         value: false
       - key: APP_KEY
-        generateValue: true
+        sync: false
       - key: APP_URL
-        value: https://your-app.onrender.com
+        sync: false
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: LOG_LEVEL
+        value: debug
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
@@ -45,9 +43,14 @@ services:
           name: laravel-db
           property: password
       - key: FRONTEND_URL
-        value: https://your-app.vercel.app
+        sync: false
+      - key: SESSION_DRIVER
+        value: file
+      - key: QUEUE_CONNECTION
+        value: sync
 
 databases:
   - name: laravel-db
     databaseName: laravel
     user: laravel
+    plan: free
