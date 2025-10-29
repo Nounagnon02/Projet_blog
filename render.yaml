@@ -17,6 +17,30 @@ services:
       - key: APP_KEY
         generateValue: true
       - key: DB_CONNECTION
-        value: sqlite
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: histories_6eia
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: histories_6eia
+          property: port
       - key: DB_DATABASE
-        value: database/database.sqlite
+        fromDatabase:
+          name: histories_6eia
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: histories_6eia
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: histories_6eia
+          property: password
+      - key: FRONTEND_URL
+        sync: false
+      - key: SESSION_DRIVER
+        value: file
+      - key: QUEUE_CONNECTION
+        value: sync
