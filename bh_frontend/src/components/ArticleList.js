@@ -21,11 +21,13 @@ const ArticleList = () => {
     try {
         setLoading(true);
         
-        const response = await api.get('/articles');
+        const response = await fetch('https://projet-blog-wg7g.onrender.com/api/articles');
         
         if (!response.ok) {
             throw new Error('Erreur lors du chargement des articles dans le try');
+            
         }
+        console.log('Détails de l erreur:', error.response);
         
         const data = await response.json();
         
@@ -46,6 +48,7 @@ const ArticleList = () => {
     } catch (err) {
         console.error('Erreur API:', err);
         setError('Erreur lors du chargement des articles');
+        console.log('Détails de l erreur:', error.response);
         
         // Données de démonstration...
         const mockArticles = [
