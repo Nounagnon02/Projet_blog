@@ -9,7 +9,7 @@ php artisan migrate --force
 # Exécuter les seeders SEULEMENT si c'est le premier déploiement
 # ou si la variable FORCE_SEED est définie
 if [ "$FORCE_SEED" = "true" ] || [ ! -f /var/www/storage/.seeded ]; then
-    echo "🌱 Exécution des seeders..."
+    echo "Exécution des seeders..."
     php artisan db:seed --force
     # Créer un fichier marqueur pour ne pas réexécuter
     touch /var/www/storage/.seeded

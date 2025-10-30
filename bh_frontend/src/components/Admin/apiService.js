@@ -1,11 +1,12 @@
 import axios from 'axios';
 
 // Configuration de base d'axios
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api' || 'https://projet-blog-wg7g.onrender.com/api';
+//const API_BASE_URL =  'http://localhost:8000/api' || 'https://projet-blog-wg7g.onrender.com/api';
+const API_BASE_URL_PROD ='https://projet-blog-wg7g.onrender.com/api';
 
 // Instance axios configurée
 const apiClient = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: API_BASE_URL_PROD,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'

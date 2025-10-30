@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, Calendar, User, Clock, ArrowRight, Search, X, ArrowLeft, Share2, Bookmark } from 'lucide-react';
 import './ArticleList.css';
+import api from '../services/Api';
 
 const ArticleList = () => {
   const [articles, setArticles] = useState([]);
@@ -20,7 +21,7 @@ const ArticleList = () => {
     try {
         setLoading(true);
         
-        const response = await fetch('http://localhost:8000/api/articles');
+        const response = await api.get('/articles');
         
         if (!response.ok) {
             throw new Error('Erreur lors du chargement des articles');
