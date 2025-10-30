@@ -350,9 +350,9 @@ const loadArticles = async () => {
               <span>Collection de Légendes</span>
             </div>
             
-            <span className="hero-title">
+            <p className="hero-title">
               Histoires <span className="hero-title-highlight">Légendaires</span>
-            </span>
+            </p>
             
             <p className="hero-description">
               Explorez les mythes et récits épiques qui ont traversé les âges
