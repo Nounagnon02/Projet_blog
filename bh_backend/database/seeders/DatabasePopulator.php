@@ -15,7 +15,7 @@ class DatabasePopulator extends Seeder
         // 1. Créer un utilisateur admin
         $admin = User::create([
             'name' => 'Administrateur',
-            'email' => 'admin@storyhub.com',
+            'email' => 'admin@gmail.com',
             'password' => Hash::make('admin123'),
             'email_verified_at' => now(),
         ]);
@@ -33,35 +33,41 @@ class DatabasePopulator extends Seeder
             Category::create($category);
         }
 
-        // 3. Créer des articles d'exemple
+        // 3. Créer des articles de démonstration
         $articles = [
             [
-                'title' => 'Le Secret de la Forêt Enchantée',
-                'short_description' => 'Une aventure magique au cœur d\'une forêt mystérieuse peuplée de créatures fantastiques.',
-                'content' => 'Il était une fois, dans une forêt enchantée où les arbres murmuraient des secrets anciens...',
-                'image' => 'histoires_images/foret_enchantee.jpg',
+                'title' => 'L\'épopée de l\'explorateur perdu',
+                'content1' => 'C\'est l\'histoire d\'un explorateur qui a disparu dans la jungle amazonienne...',
+                'content2' => 'Après des semaines de recherches, il a finalement été retrouvé sain et sauf.',
+                'short_description' => 'Une aventure palpitante dans la jungle.',
+                'image1' => 'explorer1.jpg',
+                'image2' => 'explorer2.jpg',
                 'author_id' => $admin->id,
-                'category_id' => 1,
+                'category_id' => Category::where('name', 'Aventure')->first()->id,
                 'date_published' => now(),
             ],
             [
-                'title' => 'L\'Amour aux Temps Modernes', 
-                'short_description' => 'Une histoire d\'amour contemporaine entre deux âmes perdues qui se retrouvent.',
-                'content' => 'Dans l\'effervescence de la ville, deux destins se croisent par hasard...',
-                'image' => 'histoires_images/amour_modernes.jpg',
+                'title' => 'Le mystère de la maison hantée',
+                'content1' => 'Une vieille maison abandonnée recèle de nombreux secrets...',
+                'content2' => 'Les habitants du village racontent des histoires effrayantes à son sujet.',
+                'short_description' => 'Un récit captivant de mystère et de suspense.',
+                'image1' => 'haunted1.jpg',
+                'image2' => 'haunted2.jpg',
                 'author_id' => $admin->id,
-                'category_id' => 2,
-                'date_published' => now()->subDays(2),
+                'category_id' => Category::where('name', 'Mystère')->first()->id,
+                'date_published' => now(),
             ],
             [
-                'title' => 'Le Mystère du Manoir Hanté',
-                'short_description' => 'Une enquête palpitante dans un manoir aux secrets bien gardés.',
-                'content' => 'La porte grinça sinistrement lorsqu\'elle s\'ouvrit sur l\'obscurité du manoir...',
-                'image' => 'histoires_images/manoir_hante.jpg', 
+                'title' => 'Amour au clair de lune',
+                'content1' => 'Deux âmes sœurs se rencontrent lors d\'une nuit étoilée...',
+                'content2' => 'Leur histoire d\'amour transcende le temps et l\'espace.',
+                'short_description' => 'Une romance touchante sous le ciel nocturne.',
+                'image1' => 'romance1.jpg',
+                'image2' => 'romance2.jpg',
                 'author_id' => $admin->id,
-                'category_id' => 3,
-                'date_published' => now()->subDays(5),
-            ]
+                'category_id' => Category::where('name', 'Romance')->first()->id,
+                'date_published' => now(),
+            ],
         ];
 
         foreach ($articles as $article) {

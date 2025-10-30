@@ -62,7 +62,7 @@ const handleSubmit = async (e) => {
       console.log('Response:', result.data);
       
       if (result.data.success) {
-        alert('🎉 Histoire créée avec succès!');
+        alert('Histoire créée avec succès!');
         
         setTimeout(() => {
           window.location.reload();

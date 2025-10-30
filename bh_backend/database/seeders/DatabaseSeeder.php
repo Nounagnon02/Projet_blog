@@ -14,7 +14,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(Adminton::class);
+        //$this->call(Adminton::class);
         $this->call(DatabasePopulator::class);
+        $this->call(PagesSeeder::class);
+        //$this->call(PageViewSeeder::class);
+        $this->call(ContactMessageSeeder::class);
     }
 }
