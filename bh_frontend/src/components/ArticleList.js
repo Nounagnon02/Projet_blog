@@ -17,7 +17,7 @@ const ArticleList = () => {
   }, []);
 
 
-  const loadArticles = async () => {
+  /*const loadArticles = async () => {
     try {
         setLoading(true);
         
@@ -83,6 +83,90 @@ const ArticleList = () => {
           title: "Le Dragon Céleste",
           short_description: "L'empereur jaune et sa quête pour dompter le dragon céleste qui contrôlait les pluies et les récoltes de l'empire du milieu.",
           content: "Sous le règne de l'empereur Huangdi, l'Empire du Milieu connaissait une terrible sécheresse. Les rivières s'asséchaient, les récoltes mouraient, et le peuple souffrait. Les sages de la cour consultèrent les oracles et découvrirent que le Dragon Céleste, gardien des pluies, était en colère.\n\nCe dragon majestueux, Long, vivait dans les nuages et contrôlait les eaux du ciel. Sa colère venait d'une offense commise par un ancien empereur qui avait négligé les rituels sacrés. Pour sauver son peuple, Huangdi devait entreprendre une quête périlleuse : monter au sommet de la montagne Kunlun et obtenir le pardon du dragon.\n\nL'empereur se prépara pendant quarante jours, jeûnant et méditant. Il gravit ensuite la montagne sacrée, affrontant des tempêtes terribles et des épreuves qui auraient brisé n'importe quel mortel. Mais sa détermination était inébranlable.\n\nAu sommet, entouré de nuages tourbillonnants, l'empereur rencontra enfin le Dragon Céleste. La créature était immense, ses écailles brillaient comme des émeraudes, et ses yeux contenaient la sagesse des âges. Le dragon interrogea Huangdi sur sa compréhension du Tao, de l'harmonie entre le ciel et la terre.\n\nL'empereur répondit avec humilité et sagesse, démontrant qu'il comprenait que l'homme et la nature devaient vivre en équilibre. Impressionné, le Dragon Céleste accepta de restaurer les pluies, à condition que l'empereur et ses descendants honorent toujours le pacte entre le ciel et la terre.",
+          image_url1: "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?w=800&auto=format&fit=crop",
+          image_url2: "https://images.unsplash.com/photo-1490604001847-b712b0c2f967?w=800&auto=format&fit=crop",
+          category: { id: 3, name: "Mythologie Chinoise" },
+          author: { id: 3, name: "Li Bai" },
+          date_published: "2024-09-25",
+          reading_time: "10 min"
+        }
+      ];
+        
+        setArticles(mockArticles);
+        const uniqueCategories = ['all', ...new Set(mockArticles.map(article => article.category?.name).filter(Boolean))];
+        setCategories(uniqueCategories);
+        
+    } finally {
+        setLoading(false);
+    }
+};*/
+
+const loadArticles = async () => {
+    try {
+        setLoading(true);
+        
+        const response = await fetch('https://projet-blog-wg7g.onrender.com/api/articles');
+        
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP: ${response.status} - ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        
+        // Ajouter des valeurs par défaut pour éviter les erreurs
+        const articlesWithDefaults = data.map(article => ({
+            ...article,
+            category: article.category || { id: 0, name: 'Non catégorisé' },
+            author: article.author || { id: 0, name: 'Auteur inconnu' },
+            reading_time: article.reading_time || '5 min'
+        }));
+        
+        setArticles(articlesWithDefaults);
+        
+        // Extraire les catégories uniques
+        const uniqueCategories = ['all', ...new Set(articlesWithDefaults.map(article => article.category?.name).filter(Boolean))];
+        setCategories(uniqueCategories);
+        
+    } catch (err) {
+        console.error('Erreur API:', err);
+        console.error('Message d erreur:', err.message);
+        console.error('Stack trace:', err.stack);
+        setError('Erreur lors du chargement des articles');
+        
+        // Données de démonstration...
+        const mockArticles = [
+        {
+          id: 1,
+          title: "La Légende de Prométhée",
+          short_description: "L'histoire du titan qui déroba le feu aux dieux pour l'offrir aux hommes, défiant ainsi la volonté de Zeus et s'attirant un châtiment éternel.",
+          content1: "Dans les temps anciens, lorsque les dieux régnaient sur l'Olympe et que les hommes vivaient dans l'obscurité, Prométhée, le titan visionnaire, observait avec compassion la souffrance des mortels. Contrairement à ses frères, il voyait en l'humanité un potentiel inexploité, une étincelle de divinité qui ne demandait qu'à briller.\n\nUn jour, pris de pitié devant le sort misérable des hommes qui grelottaient dans le froid et l'ignorance, Prométhée prit une décision qui changerait le destin de l'humanité à jamais. Il se rendit sur l'Olympe, attendit que les dieux soient plongés dans leur sommeil, et déroba une braise du feu sacré d'Héphaïstos.\n\nCachant cette flamme divine dans une tige de fenouil creux, il descendit sur terre et offrit ce présent inestimable aux hommes. Le feu leur permit de se chauffer, de cuire leurs aliments, de forger des outils et des armes. C'était le début de la civilisation.\n\nMais Zeus, roi des dieux, découvrit rapidement ce vol sacrilège. Sa colère fut terrible. Pour punir Prométhée de son audace, il ordonna qu'on l'enchaîne au sommet du Caucase. Chaque jour, un aigle venait dévorer son foie, qui se régénérait chaque nuit pour que le supplice recommence à l'infini.\n\nAinsi, Prométhée souffrit pendant des millénaires, mais jamais il ne regretta son geste. Car grâce à lui, l'humanité avait reçu la lumière de la connaissance et le pouvoir de façonner son propre destin.",
+          content2: "Dans les temps anciens, lorsque les dieux régnaient sur l'Olympe et que les hommes vivaient dans l'obscurité, Prométhée, le titan visionnaire, observait avec compassion la souffrance des mortels. Contrairement à ses frères, il voyait en l'humanité un potentiel inexploité, une étincelle de divinité qui ne demandait qu'à briller.\n\nUn jour, pris de pitié devant le sort misérable des hommes qui grelottaient dans le froid et l'ignorance, Prométhée prit une décision qui changerait le destin de l'humanité à jamais. Il se rendit sur l'Olympe, attendit que les dieux soient plongés dans leur sommeil, et déroba une braise du feu sacré d'Héphaïstos.\n\nCachant cette flamme divine dans une tige de fenouil creux, il descendit sur terre et offrit ce présent inestimable aux hommes. Le feu leur permit de se chauffer, de cuire leurs aliments, de forger des outils et des armes. C'était le début de la civilisation.\n\nMais Zeus, roi des dieux, découvrit rapidement ce vol sacrilège. Sa colère fut terrible. Pour punir Prométhée de son audace, il ordonna qu'on l'enchaîne au sommet du Caucase. Chaque jour, un aigle venait dévorer son foie, qui se régénérait chaque nuit pour que le supplice recommence à l'infini.\n\nAinsi, Prométhée souffrit pendant des millénaires, mais jamais il ne regretta son geste. Car grâce à lui, l'humanité avait reçu la lumière de la connaissance et le pouvoir de façonner son propre destin.",
+          image_url1: "https://images.unsplash.com/photo-1533854775446-95c4609da544?w=800&auto=format&fit=crop",
+          image_url2: "https://images.unsplash.com/photo-1542281286-9e0a16bb7366?w=800&auto=format&fit=crop",
+          category: { id: 1, name: "Mythologie Grecque" },
+          author: { id: 1, name: "Hésiode" },
+          date_published: "2024-10-01",
+          reading_time: "8 min"
+        },
+        {
+          id: 2,
+          title: "Odin et les Runes",
+          short_description: "Le sacrifice d'Odin sur l'arbre Yggdrasil pendant neuf jours et neuf nuits pour obtenir la connaissance des runes mystiques.",
+          content1: "Au commencement des temps nordiques, Odin, le Père de Toutes Choses, régnait sur Asgard avec sagesse. Mais malgré toute sa puissance et sa connaissance, il savait qu'il manquait quelque chose d'essentiel : la maîtrise des runes, ces symboles mystiques qui contenaient les secrets de l'univers.\n\nLes runes n'appartenaient à personne, elles existaient au-delà des neuf mondes, dans un royaume de pure connaissance accessible seulement par le sacrifice ultime. Odin comprit que pour les obtenir, il devrait offrir quelque chose de précieux : lui-même.\n\nIl se rendit au pied d'Yggdrasil, l'arbre-monde qui reliait tous les royaumes, et prit sa lance Gungnir. Dans un geste de détermination absolue, il se transperça le flanc et se pendit à une branche de l'arbre cosmique. Là, suspendu entre la vie et la mort, sans nourriture ni eau, Odin entama son épreuve.\n\nPendant neuf jours et neuf nuits, le Père des Dieux souffrit en silence. Il regarda dans les profondeurs du vide, dans le puits de Mimir où réside toute sagesse. La douleur était insupportable, la solitude écrasante, mais Odin persévéra.\n\nAu crépuscule du neuvième jour, alors qu'il touchait aux frontières de la mort, les runes lui apparurent enfin. Dans un cri de triomphe et d'agonie, il les saisit et tomba de l'arbre. Les runes étaient siennes, et avec elles, le pouvoir de lire le destin, de jeter des sorts et de comprendre les mystères les plus profonds de l'existence.",
+          content2: "Dans les temps anciens, lorsque les dieux régnaient sur l'Olympe et que les hommes vivaient dans l'obscurité, Prométhée, le titan visionnaire, observait avec compassion la souffrance des mortels. Contrairement à ses frères, il voyait en l'humanité un potentiel inexploité, une étincelle de divinité qui ne demandait qu'à briller.\n\nUn jour, pris de pitié devant le sort misérable des hommes qui grelottaient dans le froid et l'ignorance, Prométhée prit une décision qui changerait le destin de l'humanité à jamais. Il se rendit sur l'Olympe, attendit que les dieux soient plongés dans leur sommeil, et déroba une braise du feu sacré d'Héphaïstos.\n\nCachant cette flamme divine dans une tige de fenouil creux, il descendit sur terre et offrit ce présent inestimable aux hommes. Le feu leur permit de se chauffer, de cuire leurs aliments, de forger des outils et des armes. C'était le début de la civilisation.\n\nMais Zeus, roi des dieux, découvrit rapidement ce vol sacrilège. Sa colère fut terrible. Pour punir Prométhée de son audace, il ordonna qu'on l'enchaîne au sommet du Caucase. Chaque jour, un aigle venait dévorer son foie, qui se régénérait chaque nuit pour que le supplice recommence à l'infini.\n\nAinsi, Prométhée souffrit pendant des millénaires, mais jamais il ne regretta son geste. Car grâce à lui, l'humanité avait reçu la lumière de la connaissance et le pouvoir de façonner son propre destin.",
+          image_url1: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&auto=format&fit=crop",
+          image_url2: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop",
+          category: { id: 2, name: "Mythologie Nordique" },
+          author: { id: 2, name: "Snorri Sturluson" },
+          date_published: "2024-09-28",
+          reading_time: "12 min"
+        },
+        {
+          id: 3,
+          title: "Le Dragon Céleste",
+          short_description: "L'empereur jaune et sa quête pour dompter le dragon céleste qui contrôlait les pluies et les récoltes de l'empire du milieu.",
+          content1: "Sous le règne de l'empereur Huangdi, l'Empire du Milieu connaissait une terrible sécheresse. Les rivières s'asséchaient, les récoltes mouraient, et le peuple souffrait. Les sages de la cour consultèrent les oracles et découvrirent que le Dragon Céleste, gardien des pluies, était en colère.\n\nCe dragon majestueux, Long, vivait dans les nuages et contrôlait les eaux du ciel. Sa colère venait d'une offense commise par un ancien empereur qui avait négligé les rituels sacrés. Pour sauver son peuple, Huangdi devait entreprendre une quête périlleuse : monter au sommet de la montagne Kunlun et obtenir le pardon du dragon.\n\nL'empereur se prépara pendant quarante jours, jeûnant et méditant. Il gravit ensuite la montagne sacrée, affrontant des tempêtes terribles et des épreuves qui auraient brisé n'importe quel mortel. Mais sa détermination était inébranlable.\n\nAu sommet, entouré de nuages tourbillonnants, l'empereur rencontra enfin le Dragon Céleste. La créature était immense, ses écailles brillaient comme des émeraudes, et ses yeux contenaient la sagesse des âges. Le dragon interrogea Huangdi sur sa compréhension du Tao, de l'harmonie entre le ciel et la terre.\n\nL'empereur répondit avec humilité et sagesse, démontrant qu'il comprenait que l'homme et la nature devaient vivre en équilibre. Impressionné, le Dragon Céleste accepta de restaurer les pluies, à condition que l'empereur et ses descendants honorent toujours le pacte entre le ciel et la terre.",
+          content2: "",
           image_url1: "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?w=800&auto=format&fit=crop",
           image_url2: "https://images.unsplash.com/photo-1490604001847-b712b0c2f967?w=800&auto=format&fit=crop",
           category: { id: 3, name: "Mythologie Chinoise" },
