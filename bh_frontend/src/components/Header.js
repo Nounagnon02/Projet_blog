@@ -103,7 +103,7 @@ const Header = () => {
     >
       <nav className="navbar">
         <Link to="/" className="logo">
-          <span className="logo-icon">✨</span>
+          <span className="logo-icon">📚</span>
           {aboutData.heroTitle}
         </Link>
         
@@ -122,7 +122,7 @@ const Header = () => {
             to="/" 
             className={`nav-link ${isActiveRoute('/') ? 'active' : ''}`}
           >
-            <span className="link-icon">🏛</span>
+            <span className="link-icon">🏠</span>
             Accueil
           </Link>
           
@@ -130,7 +130,7 @@ const Header = () => {
             to="/about" 
             className={`nav-link ${isActiveRoute('/about') ? 'active' : ''}`}
           >
-            <span className="link-icon">👥</span>
+            <span className="link-icon">ℹ️</span>
             À Propos
           </Link>
           
@@ -138,7 +138,7 @@ const Header = () => {
             to="/contact" 
             className={`nav-link ${isActiveRoute('/contact') ? 'active' : ''}`}
           >
-            <span className="link-icon">📞</span>
+            <span className="link-icon">✉️</span>
             Contact
           </Link>
           
@@ -146,7 +146,7 @@ const Header = () => {
             to="/privacy" 
             className={`nav-link ${isActiveRoute('/privacy') ? 'active' : ''}`}
           >
-            <span className="link-icon">🔒</span>
+            <span className="link-icon">🔐</span>
             Confidentialité
           </Link>
         </div>
